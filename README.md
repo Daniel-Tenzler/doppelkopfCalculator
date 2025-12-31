@@ -1,73 +1,111 @@
-# React + TypeScript + Vite
+# Doppelkopf Scorer
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A web application for tracking scores during Doppelkopf card game sessions. Built with React, TypeScript, and styled-components.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- Configure 4 players with names and colors
+- Two Spritze modes:
+  - Normal mode with predefined types (below 90/60/30 points, schwarz, against queens, solo, announced)
+  - Custom mode with manual numeric input
+- Create, accept, and undo rounds with automatic score calculation
+- Display player standings and position rankings
+- Game state persists in local storage
+- Light and dark theme toggle with persistent preferences
 
-## React Compiler
+## Getting Started
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+### Prerequisites
 
-## Expanding the ESLint configuration
+- Node.js 18+ 
+- npm or yarn
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+### Installation
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+```bash
+# Clone the repository
+git clone https://github.com/your-username/doppelkopf.git
+cd doppelkopf
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# Install dependencies
+npm install
+# or
+yarn install
 ```
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+### Development
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+```bash
+# Start development server
+npm run dev
+# or
+yarn dev
 ```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+### Building
+
+```bash
+# Build for production
+npm run build
+# or
+yarn build
+
+# Preview production build
+npm run preview
+# or
+yarn preview
+```
+
+## Usage
+
+1. **Start a New Game**: Enter player names, select colors, and choose Spritze mode
+2. **Play Rounds**: Select winners (0-4 players) and configure Spritzes for each round
+3. **Accept Rounds**: Click the accept button to finalize scores and move to the next round
+4. **Track Standings**: View real-time player positions and total scores
+5. **Undo Mistakes**: Reset the previous round if needed (only the immediately previous round can be undone)
+
+## Spritze System
+
+The game uses a doubling multiplier system:
+- Base points: 10 per round
+- Formula: `Round Points = 10 × 2^(Total Spritzes)`
+- Spritzes stack additively from active selections and carry-over spritzes
+- Carry-over spritzes are applied to losing players for 2 subsequent rounds
+
+## Technology Stack
+
+- React 19
+- TypeScript
+- Vite
+- Styled Components
+- ESLint
+
+## Project Structure
+
+```
+src/
+├── components/           # React components
+│   ├── EntryScreen/     # Game setup interface
+│   ├── GameScreen/      # Active game interface
+│   └── ThemeProvider.tsx # Theme context and provider
+├── context/             # React contexts
+├── hooks/               # Custom React hooks
+├── logic/               # Game logic and calculations
+├── services/            # External integrations (localStorage)
+├── theme/               # Theme definitions
+├── types/               # TypeScript type definitions
+└── utils/               # Utility functions
+```
+
+## Development Scripts
+
+- `npm run dev` - Start development server with hot reload
+- `npm run build` - Build for production
+- `npm run lint` - Run ESLint and TypeScript checks
+- `npm run preview` - Preview production build locally
+
+## License
+
+This project is open source and available under the [MIT License](LICENSE).
