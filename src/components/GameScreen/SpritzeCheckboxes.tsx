@@ -96,12 +96,6 @@ export const SpritzeCheckboxes: React.FC<SpritzeCheckboxesProps> = ({
         ))}
       </CheckboxGroup>
       
-      {selectedTypes.length > 0 && (
-        <StatusText>
-          {selectedTypes.length} spritze{selectedTypes.length !== 1 ? 's' : ''}
-        </StatusText>
-      )}
-
       {/* Player Announcement Checkboxes */}
       <AnnounceSection>
         <AnnounceGroup>
@@ -120,11 +114,6 @@ export const SpritzeCheckboxes: React.FC<SpritzeCheckboxesProps> = ({
             </CheckboxLabel>
           ))}
         </AnnounceGroup>
-        {announcedBy.length > 0 && (
-          <StatusText>
-            {announcedBy.length} announced{announcedBy.length !== 1 ? '' : ''}
-          </StatusText>
-        )}
       </AnnounceSection>
     </SpritzeCheckboxesContainer>
   );

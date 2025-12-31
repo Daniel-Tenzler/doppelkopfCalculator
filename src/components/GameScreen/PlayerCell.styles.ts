@@ -28,6 +28,8 @@ export const PlayerCellContainer = styled.div<PlayerCellPropsInternal>`
   justify-content: center;
   position: relative;
   transition: background 0.2s ease, outline 0.2s ease;
+  height: 100px;
+  align-self: center;
 
   ${({ $isCurrentRound, $isWinner, theme }) => $isCurrentRound && `
     cursor: pointer;
@@ -61,4 +63,13 @@ export const PlayerColorIndicator = styled.div<{ $color: string }>`
   border-radius: 50%;
   background: ${({ $color }) => $color};
   border: 1px solid ${({ theme }) => theme.colors.border};
+`;
+
+export const PlayerName = styled.span`
+  font-weight: 600;
+  font-size: 16px;
+  color: ${({ theme }) => theme.colors.text};
+  text-align: center;
+  word-break: break-word;
+  padding: 0 8px;
 `;

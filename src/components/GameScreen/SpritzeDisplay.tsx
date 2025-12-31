@@ -156,9 +156,9 @@ export const SpritzeDisplay: React.FC<SpritzeDisplayProps> = ({
               parts.push(`L: ${lossCarryOvers.length}`);
             }
             if (announcementCarryOvers.length > 0) {
-              parts.push(`A: ${announcementCarryOvers.length}`);
+              parts.push(`S: ${announcementCarryOvers.length}`);
             }
-            return `Carry-over: ${parts.join(', ')}`;
+            return `Übernommen: ${parts.join(', ')}`;
           })()}
         </CarryOverIndicator>
       )}

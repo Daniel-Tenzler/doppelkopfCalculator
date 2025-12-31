@@ -9,6 +9,9 @@ export const SpritzeDisplayContainer = styled.div`
   min-height: ${COMPONENT_SIZES.MIN_CELL_HEIGHT};
   display: flex;
   flex-direction: column;
+  min-height: 100px;
+  height: fit-content;
+  align-self: center;
   gap: 6px;
 `;
 

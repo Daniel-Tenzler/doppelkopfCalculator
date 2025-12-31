@@ -8,7 +8,7 @@ interface RoundNumberCellProps {
 
 export const RoundNumberCell = styled.div<RoundNumberCellProps>`
   position: relative;
-  padding: 8px 8px;
+  padding: 12px 8px;
   width: 60px;
   text-align: center;
   font-weight: 600;
@@ -23,6 +23,8 @@ export const RoundNumberCell = styled.div<RoundNumberCellProps>`
   justify-content: center;
   cursor: ${({ $isCurrentRound, $isPreviousRound }) => ($isCurrentRound || $isPreviousRound) ? 'pointer' : 'default'};
   overflow: hidden;
+  height: 100px;
+  align-self: center;
 
   &:hover {
     background: ${({ $isCurrentRound, $isPreviousRound, theme }) => ($isCurrentRound || $isPreviousRound) ? theme.colors.primary + '20' : theme.colors.surface};

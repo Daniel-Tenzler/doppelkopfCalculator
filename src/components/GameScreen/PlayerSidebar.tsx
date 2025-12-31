@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { PlayerCard } from './PlayerCard';
+import { PlayerBarChart } from './PlayerBarChart';
 import type { Player } from '../../types';
 import {
   SidebarContainer,
@@ -96,15 +96,7 @@ export function PlayerSidebar({
               <EmptyStateText>No players configured</EmptyStateText>
             </EmptyState>
           ) : (
-            players.map((player) => (
-              <PlayerCard
-                key={player.id}
-                name={player.name}
-                color={player.color}
-                totalScore={player.totalScore}
-                position={player.position}
-              />
-            ))
+            <PlayerBarChart players={players} />
           )}
         </PlayerList>
 

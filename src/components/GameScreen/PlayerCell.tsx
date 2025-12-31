@@ -4,7 +4,8 @@ import {
   PlayerCellContainer,
   ScoreDisplay,
   CumulativeScore,
-  PlayerColorIndicator
+  PlayerColorIndicator,
+  PlayerName
 } from './PlayerCell.styles';
 
 interface PlayerCellProps {
@@ -71,6 +72,7 @@ export const PlayerCell: React.FC<PlayerCellProps> = ({
         aria-checked={isWinner}
         aria-label={getAriaLabel()}
       >
+        <PlayerName>{player.name}</PlayerName>
         <PlayerColorIndicator $color={player.color} />
       </PlayerCellContainer>
     );
