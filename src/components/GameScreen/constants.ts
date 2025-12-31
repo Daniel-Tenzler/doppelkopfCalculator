@@ -23,7 +23,7 @@ export const LAYOUT = {
   CONTAINER_PADDING_X: '32px',
   CONTAINER_PADDING_Y: '40px',
   SECTION_GAP: '32px',
-  CARD_PADDING: '24px',
+  CARD_PADDING: '16px',
   BORDER_RADIUS: '12px',
   BORDER_RADIUS_LARGE: '16px',
 } as const;

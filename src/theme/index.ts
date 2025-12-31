@@ -93,9 +93,9 @@ export const lightTheme: ThemeDefinition = {
     // Game-specific colors
     winner: '#38A169', // Green for winners
     loser: '#718096', // Muted gray for losers
-    spritzeActive: '#805AD5', // Purple for active Spritzes
-    spritzeInactive: '#CBD5E0', // Light gray for inactive Spritzes
-    carryOver: '#ED8936', // Orange for carry-over Spritzes
+    spritzeActive: '#805AD5', // Purple for active Spritzen
+    spritzeInactive: '#CBD5E0', // Light gray for inactive Spritzen
+    carryOver: '#ED8936', // Orange for carry-over Spritzen
     
     // Shadow effects
     shadow: 'rgba(0, 0, 0, 0.1)', // Light shadow
@@ -142,9 +142,9 @@ export const darkTheme: ThemeDefinition = {
     // Game-specific colors
     winner: '#68D391', // Lighter green for winners
     loser: '#A0AEC0', // Light gray for losers
-    spritzeActive: '#B794F4', // Lighter purple for active Spritzes
-    spritzeInactive: '#4A5568', // Medium gray for inactive Spritzes
-    carryOver: '#F6AD55', // Lighter orange for carry-over Spritzes
+    spritzeActive: '#B794F4', // Lighter purple for active Spritzen
+    spritzeInactive: '#4A5568', // Medium gray for inactive Spritzen
+    carryOver: '#F6AD55', // Lighter orange for carry-over Spritzen
     
     // Shadow effects
     shadow: 'rgba(0, 0, 0, 0.3)', // Darker shadow

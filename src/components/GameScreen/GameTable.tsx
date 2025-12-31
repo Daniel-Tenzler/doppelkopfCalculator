@@ -222,7 +222,7 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
         ))}
         
         <HeaderCell $width={COMPONENT_SIZES.SPRITZE_DISPLAY_WIDTH}>
-          Spritzes
+          Spritzen
         </HeaderCell>
         
         {/* Spritze Controls Header - only show in normal mode */}

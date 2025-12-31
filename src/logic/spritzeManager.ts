@@ -51,12 +51,12 @@ function createErrorContext(functionName: string, data: Record<string, unknown>)
 }
 
 /**
- * Generate carry-over Spritzes for each loser in a round.
+ * Generate carry-over Spritzen for each loser in a round.
  * When a player loses, they get a carry-over Spritze for 2 subsequent rounds.
  * 
  * @param round - The round to generate carry-overs for
  * @param allPlayerIds - Array of all player IDs in the game
- * @returns Array of carry-over Spritzes, one for each loser
+ * @returns Array of carry-over Spritzen, one for each loser
  * @throws {SpritzeManagerError} When input validation fails
  */
 export function generateCarryOverSpritzes(
@@ -150,10 +150,10 @@ export function generateCarryOverSpritzes(
 }
 
 /**
- * Process carry-over Spritzes by decrementing their round counters
+ * Process carry-over Spritzen by decrementing their round counters
  * and filtering out expired carry-overs (roundsRemaining <= 0).
  * 
- * @param carryOvers - Array of carry-over Spritzes to process
+ * @param carryOvers - Array of carry-over Spritzen to process
  * @returns Processed array with expired carry-overs removed
  * @throws {SpritzeManagerError} When input validation fails
  */
@@ -235,10 +235,10 @@ export function processCarryOverSpritzes(carryOvers: CarryOverSpritze[]): CarryO
 }
 
 /**
- * Remove carry-over Spritzes that originated from a specific round.
+ * Remove carry-over Spritzen that originated from a specific round.
  * This is used when a round is reset (undo functionality).
  * 
- * @param carryOvers - Array of carry-over Spritzes
+ * @param carryOvers - Array of carry-over Spritzen
  * @param originRoundIndex - The round index to remove carry-overs from
  * @returns Array with carry-overs from specified round removed
  * @throws {SpritzeManagerError} When input validation fails
@@ -299,10 +299,10 @@ export function removeCarryOversFromRound(
 }
 
 /**
- * Get active carry-over Spritzes for a specific player.
+ * Get active carry-over Spritzen for a specific player.
  * This is useful for UI display and debugging.
  * 
- * @param carryOvers - Array of all carry-over Spritzes
+ * @param carryOvers - Array of all carry-over Spritzen
  * @param playerId - ID of the player to get carry-overs for
  * @returns Array of carry-overs for the specified player
  */
@@ -339,9 +339,9 @@ export function getPlayerCarryOvers(
 }
 
 /**
- * Check if a player has any active carry-over Spritzes.
+ * Check if a player has any active carry-over Spritzen.
  * 
- * @param carryOvers - Array of carry-over Spritzes
+ * @param carryOvers - Array of carry-over Spritzen
  * @param playerId - ID of the player to check
  * @returns True if player has active carry-overs
  */
@@ -353,10 +353,10 @@ export function playerHasCarryOvers(
 }
 
 /**
- * Get the total number of carry-over Spritzes for all players.
+ * Get the total number of carry-over Spritzen for all players.
  * Useful for debugging and UI display.
  * 
- * @param carryOvers - Array of carry-over Spritzes
+ * @param carryOvers - Array of carry-over Spritzen
  * @returns Total count of active carry-overs
  */
 export function getTotalCarryOverCount(carryOvers: CarryOverSpritze[]): number {
@@ -382,12 +382,12 @@ export function getTotalCarryOverCount(carryOvers: CarryOverSpritze[]): number {
 }
 
 /**
- * Generate carry-over Spritzes for failed announcements.
+ * Generate carry-over Spritzen for failed announcements.
  * When a player announces they will win but loses, they get a carry-over Spritze for 2 subsequent rounds.
  * 
  * @param round - The round to check for failed announcements
  * @param allPlayerIds - Array of all player IDs in the game
- * @returns Array of carry-over Spritzes for failed announcements
+ * @returns Array of carry-over Spritzen for failed announcements
  * @throws {SpritzeManagerError} When input validation fails
  */
 export function generateAnnouncementCarryOvers(
@@ -503,7 +503,7 @@ export function generateAnnouncementCarryOvers(
 }
 
 /**
- * Deduplicate carry-over Spritzes when players both lose and have announcements.
+ * Deduplicate carry-over Spritzen when players both lose and have announcements.
  * Players who both lose and announce should only get one carry-over (loss takes priority).
  * 
  * @param lossCarryOvers - Carry-overs from losing

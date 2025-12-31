@@ -20,11 +20,12 @@ export const ErrorState = styled.div`
 export const GameScreenContainer = styled.div`
   display: flex;
   gap: ${LAYOUT.SECTION_GAP};
-  padding: ${LAYOUT.CONTAINER_PADDING_Y} ${LAYOUT.CONTAINER_PADDING_X};
+  padding: 0 ${LAYOUT.CONTAINER_PADDING_X};
   min-height: 100vh;
   background: ${({ theme }) => theme.colors.background};
   max-width: ${LAYOUT.CONTAINER_MAX_WIDTH};
   margin: 0 auto;
+  position: relative;
   
   @media (max-width: 1200px) {
     gap: 24px;
@@ -45,7 +46,11 @@ export const GameScreenContainer = styled.div`
 
 export const SidebarContainer = styled.div`
   flex: 0 0 ${COMPONENT_SIZES.SIDEBAR_WIDTH};
-  min-width: ${COMPONENT_SIZES.SIDEBAR_WIDTH};
+  display: flex;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  height: 100vh;
   
   @media (max-width: 1200px) {
     flex: 0 0 320px;
@@ -56,6 +61,9 @@ export const SidebarContainer = styled.div`
     flex: none;
     width: 100%;
     min-width: auto;
+    align-items: flex-start;
+    position: static;
+    height: auto;
   }
 `;
 

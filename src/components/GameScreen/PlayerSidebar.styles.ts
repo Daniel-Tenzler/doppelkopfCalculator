@@ -11,7 +11,7 @@ export const SidebarContainer = styled.div`
   display: flex;
   flex-direction: column;
   height: fit-content;
-  max-height: calc(100vh - 80px);
+  max-height: calc(100vh - 50px);
   overflow-y: auto;
   
   /* Modern scrollbar styling */
@@ -39,7 +39,7 @@ export const SidebarContainer = styled.div`
 `;
 
 export const SidebarHeader = styled.div`
-  margin-bottom: 32px;
+  margin-bottom: 16px;
   padding-bottom: 24px;
   border-bottom: 1px solid ${({ theme }) => theme.colors.borderLight};
 `;
@@ -54,7 +54,7 @@ export const SidebarTitle = styled.h2`
 
 export const PlayerList = styled.div`
   flex: 1;
-  margin-bottom: 32px;
+  margin-bottom: 16px;
 `;
 
 export const EmptyState = styled.div`

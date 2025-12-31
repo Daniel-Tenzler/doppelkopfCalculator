@@ -74,6 +74,8 @@ export const RoundRow: React.FC<RoundRowProps> = ({
         spritzeState={round.spritzeState}
         carryOverSpritzes={round.carryOverSpritzes}
         mode={spritzeMode}
+        isLocked={!isCurrentRound}
+        onChange={onSpritzeChange}
       />
 
       {/* Spritze Checkboxes (only for normal mode and current round) */}

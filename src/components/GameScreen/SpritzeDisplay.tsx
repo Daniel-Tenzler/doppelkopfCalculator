@@ -1,17 +1,20 @@
-import React from 'react';
+import React, { useState, useCallback } from 'react';
 import type { SpritzeState, CarryOverSpritze, SpritzeType } from '../../types';
 import {
   SpritzeDisplayContainer,
   SpritzeCount,
   SpritzeTypes,
   SpritzePill,
-  CarryOverIndicator
+  CarryOverIndicator,
+  CustomInput
 } from './SpritzeDisplay.styles';
 
 interface SpritzeDisplayProps {
   spritzeState: SpritzeState;
   carryOverSpritzes: CarryOverSpritze[];
   mode: 'normal' | 'custom';
+  isLocked: boolean;
+  onChange?: (spritzeState: SpritzeState) => void;
 }
 
 // Human-readable labels for spritze types
@@ -29,7 +32,34 @@ export const SpritzeDisplay: React.FC<SpritzeDisplayProps> = ({
   spritzeState,
   carryOverSpritzes,
   mode,
+  isLocked,
+  onChange,
 }) => {
+  const [inputValue, setInputValue] = useState<string>(
+    String(spritzeState.customCount ?? 0)
+  );
+
+  const handleCustomCountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const value = e.target.value;
+    setInputValue(value);
+    
+    // Parse and update - allow any number including 0
+    const numValue = parseInt(value, 10);
+    if (!isNaN(numValue) && numValue >= 0 && onChange) {
+      onChange({
+        ...spritzeState,
+        customCount: numValue
+      });
+    } else if (value === '' && onChange) {
+      // Empty input = 0
+      onChange({
+        ...spritzeState,
+        customCount: 0
+      });
+    }
+  }, [spritzeState, onChange]);
+
+  // For custom mode, ignore carry-overs and announcements
   let activeSpritzes = 0;
   let spritzeTypesList: string[] = [];
 
@@ -38,13 +68,48 @@ export const SpritzeDisplay: React.FC<SpritzeDisplayProps> = ({
     const announcements = spritzeState.announcedBy?.length || 0;
     activeSpritzes = spritzeTypesList.length + announcements;
   } else {
-    const customSpritzes = spritzeState.customCount || 0;
-    const announcements = spritzeState.announcedBy?.length || 0;
-    activeSpritzes = customSpritzes + announcements;
+    // Custom mode: only use customCount, no carry-overs or announcements
+    activeSpritzes = spritzeState.customCount || 0;
   }
 
-  const totalSpritzes = activeSpritzes + carryOverSpritzes.length;
+  // In custom mode, don't add carry-overs to total
+  const totalSpritzes = mode === 'custom' 
+    ? activeSpritzes 
+    : activeSpritzes + carryOverSpritzes.length;
 
+  // Custom mode: show editable input
+  if (mode === 'custom') {
+    return (
+      <SpritzeDisplayContainer
+        role="region"
+        aria-label="Custom spritze count"
+      >
+        {isLocked ? (
+          <>
+            <SpritzeCount>
+              {totalSpritzes} {totalSpritzes === 1 ? 'Spritze' : 'Spritzen'}
+            </SpritzeCount>
+          </>
+        ) : (
+          <>
+            <CustomInput
+              type="number"
+              min="0"
+              value={inputValue}
+              onChange={handleCustomCountChange}
+              placeholder="0"
+              aria-label="Enter number of spritzes"
+            />
+            <SpritzeCount style={{ fontSize: '12px', marginTop: '4px' }}>
+              {totalSpritzes} {totalSpritzes === 1 ? 'Spritze' : 'Spritzen'}
+            </SpritzeCount>
+          </>
+        )}
+      </SpritzeDisplayContainer>
+    );
+  }
+
+  // Normal mode: show display with types and carry-overs
   if (totalSpritzes === 0) {
     return (
       <SpritzeDisplayContainer
@@ -61,23 +126,17 @@ export const SpritzeDisplay: React.FC<SpritzeDisplayProps> = ({
     <SpritzeDisplayContainer
       role="status"
       aria-live="polite"
-      aria-label={`${totalSpritzes === 1 ? '1 Spritze' : `${totalSpritzes} Spritzes`}`}
+      aria-label={`${totalSpritzes === 1 ? '1 Spritze' : `${totalSpritzes} Spritzen`}`}
     >
       <SpritzeCount>
-        {totalSpritzes} {totalSpritzes === 1 ? 'Spritze' : 'Spritzes'}
+        {totalSpritzes} {totalSpritzes === 1 ? 'Spritze' : 'Spritzen'}
       </SpritzeCount>
 
-      {mode === 'normal' && spritzeTypesList.length > 0 && (
+      {spritzeTypesList.length > 0 && (
         <SpritzeTypes>
           {spritzeTypesList.map(type => (
             <SpritzePill key={type}>{spritzeLabels[type as SpritzeType]}</SpritzePill>
           ))}
-        </SpritzeTypes>
-      )}
-
-      {mode === 'custom' && (spritzeState.customCount || 0) > 0 && (
-        <SpritzeTypes>
-          <SpritzePill>Custom: {spritzeState.customCount}</SpritzePill>
         </SpritzeTypes>
       )}
 

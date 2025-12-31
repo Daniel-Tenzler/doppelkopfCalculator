@@ -204,8 +204,11 @@ export function acceptRound(gameState: GameState, roundIndex: number): GameState
   // According to requirements: "If a player that 'spritzes' (= gives a Spritz) looses, 
   // the Spritz is counted for the next two rounds as well."
   // Regular losses do NOT generate carry-overs, only announced spritzes that fail
+  // IMPORTANT: In custom mode, there are NO carry-overs at all
   const allPlayerIds = gameState.players.map(p => p.id);
-  const newCarryOvers = generateAnnouncementCarryOvers(round, allPlayerIds);
+  const newCarryOvers = gameState.config.spritzeMode === 'custom' 
+    ? [] 
+    : generateAnnouncementCarryOvers(round, allPlayerIds);
   
   
 
@@ -256,12 +259,15 @@ export function acceptRound(gameState: GameState, roundIndex: number): GameState
   const roundsWithProcessedCarryOvers = updatedRounds;
 
   // Decrement the carry-overs from the current round for the next round
-  const decrementedCurrentCarryOvers = round.carryOverSpritzes
-    .map(carryOver => ({
-      ...carryOver,
-      roundsRemaining: carryOver.roundsRemaining - 1
-    }))
-    .filter(carryOver => carryOver.roundsRemaining > 0);
+  // In custom mode, there are no carry-overs
+  const decrementedCurrentCarryOvers = gameState.config.spritzeMode === 'custom'
+    ? []
+    : round.carryOverSpritzes
+        .map(carryOver => ({
+          ...carryOver,
+          roundsRemaining: carryOver.roundsRemaining - 1
+        }))
+        .filter(carryOver => carryOver.roundsRemaining > 0);
 
   // Create a new round after accepting the current one
   const newRound = createNewRound(roundsWithProcessedCarryOvers, gameState.config.spritzeMode);

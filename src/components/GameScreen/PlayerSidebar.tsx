@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { createPortal } from 'react-dom';
 import { PlayerCard } from './PlayerCard';
 import type { Player } from '../../types';
 import {
@@ -127,29 +128,32 @@ export function PlayerSidebar({
         </ActionSection>
       </SidebarContainer>
 
-      <Overlay 
-        $visible={showResetConfirm}
-        role="dialog"
-        aria-modal="true"
-        aria-labelledby="reset-modal-title"
-        aria-describedby="reset-modal-description"
-      >
-        <Modal>
-          <ModalTitle id="reset-modal-title">Reset Game</ModalTitle>
-          <ModalText id="reset-modal-description">
-            Are you sure you want to reset the game? This will clear all current 
-            game data and return to the setup screen. This action cannot be undone.
-          </ModalText>
-          <ModalButtons>
-            <ModalButton onClick={handleResetCancel}>
-              Cancel
-            </ModalButton>
-            <ModalButton $variant="primary" onClick={handleResetConfirm}>
-              Reset Game
-            </ModalButton>
-          </ModalButtons>
-        </Modal>
-      </Overlay>
+      {showResetConfirm && createPortal(
+        <Overlay 
+          $visible={showResetConfirm}
+          role="dialog"
+          aria-modal="true"
+          aria-labelledby="reset-modal-title"
+          aria-describedby="reset-modal-description"
+        >
+          <Modal>
+            <ModalTitle id="reset-modal-title">Reset Game</ModalTitle>
+            <ModalText id="reset-modal-description">
+              Are you sure you want to reset the game? This will clear all current 
+              game data and return to the setup screen. This action cannot be undone.
+            </ModalText>
+            <ModalButtons>
+              <ModalButton onClick={handleResetCancel}>
+                Cancel
+              </ModalButton>
+              <ModalButton $variant="primary" onClick={handleResetConfirm}>
+                Reset Game
+              </ModalButton>
+            </ModalButtons>
+          </Modal>
+        </Overlay>,
+        document.body
+      )}
     </>
   );
 }

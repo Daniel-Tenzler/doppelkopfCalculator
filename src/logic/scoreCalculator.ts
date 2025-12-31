@@ -67,10 +67,10 @@ export function isSafeSpritzeCount(totalSpritzes: number): boolean {
 }
 
 /**
- * Calculate round points based on total number of Spritzes.
+ * Calculate round points based on total number of Spritzen.
  * Base points: 10, doubles for each Spritze (10 × 2^totalSpritzes)
  * 
- * @param totalSpritzes - Total number of Spritzes (active + carry-over)
+ * @param totalSpritzes - Total number of Spritzen (active + carry-over)
  * @returns Points awarded for the round
  * @throws {ScoreCalculationError} When totalSpritzes is invalid
  */
@@ -108,12 +108,12 @@ function calculateRawPoints(totalSpritzes: number): number {
 }
 
 /**
- * Count total Spritzes for a round by combining active Spritzes and carry-over Spritzes.
+ * Count total Spritzen for a round by combining active Spritzen and carry-over Spritzen.
  * 
  * @param spritzeState - Current Spritze state for the round
- * @param carryOverSpritzes - Array of carry-over Spritzes affecting this round
+ * @param carryOverSpritzes - Array of carry-over Spritzen affecting this round
  * @param mode - Current Spritze mode ('normal' or 'custom')
- * @returns Total count of Spritzes
+ * @returns Total count of Spritzen
  * @throws {ScoreCalculationError} When inputs are invalid or inconsistent
  */
 export function countTotalSpritzes(
@@ -129,7 +129,22 @@ export function countTotalSpritzes(
     );
   }
   
-  // Validate carryOverSpritzes
+  // In custom mode, ignore carry-overs completely
+  if (mode === 'custom') {
+    const customSpritzes = spritzeState.customCount ?? 0;
+    
+    // Validate custom count
+    if (!Number.isInteger(customSpritzes) || customSpritzes < 0) {
+      throw new ScoreCalculationError(
+        `Invalid customCount: ${customSpritzes}. Must be a non-negative integer.`,
+        createErrorContext('countTotalSpritzes', { customSpritzes })
+      );
+    }
+    
+    return customSpritzes;
+  }
+  
+  // Normal mode: validate carryOverSpritzes
   if (!Array.isArray(carryOverSpritzes)) {
     throw new ScoreCalculationError(
       'carryOverSpritzes must be an array',
@@ -186,24 +201,15 @@ export function countTotalSpritzes(
     }
   });
   
-// Count active Spritzes based on mode
+// Count active Spritzen based on mode
   let activeSpritzes = 0;
 
-  if (mode === 'normal') {
-    // In normal mode, count selected Spritze types + announcements
-    const typeSpritzes = spritzeState.selectedTypes?.length ?? 0;
-    // Count both announcedBy (current round) and activeAnnouncements (carry-overs from previous rounds)
-    const currentAnnouncements = spritzeState.announcedBy?.length ?? 0;
-    const activeAnnouncements = spritzeState.activeAnnouncements?.length ?? 0;
-    activeSpritzes = typeSpritzes + currentAnnouncements + activeAnnouncements;
-  } else {
-    // In custom mode, use custom count + announcements
-    const customSpritzes = spritzeState.customCount ?? 0;
-    // Count both announcedBy (current round) and activeAnnouncements (carry-overs from previous rounds)
-    const currentAnnouncements = spritzeState.announcedBy?.length ?? 0;
-    const activeAnnouncements = spritzeState.activeAnnouncements?.length ?? 0;
-    activeSpritzes = customSpritzes + currentAnnouncements + activeAnnouncements;
-  }
+  // In normal mode, count selected Spritze types + announcements
+  const typeSpritzes = spritzeState.selectedTypes?.length ?? 0;
+  // Count both announcedBy (current round) and activeAnnouncements (carry-overs from previous rounds)
+  const currentAnnouncements = spritzeState.announcedBy?.length ?? 0;
+  const activeAnnouncements = spritzeState.activeAnnouncements?.length ?? 0;
+  activeSpritzes = typeSpritzes + currentAnnouncements + activeAnnouncements;
   
   // Validate active spritze count
   if (activeSpritzes < 0) {
@@ -216,7 +222,7 @@ export function countTotalSpritzes(
     );
   }
 
-  // Add carry-over Spritzes
+  // Add carry-over Spritzen
   const carryOverCount = carryOverSpritzes.length;
   const totalSpritzes = activeSpritzes + carryOverCount;
   

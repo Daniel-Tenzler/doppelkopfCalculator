@@ -49,3 +49,25 @@ export const CarryOverIndicator = styled.div`
   align-self: center;
   margin-top: 2px;
 `;
+
+export const CustomInput = styled.input`
+  padding: 8px 12px;
+  font-size: 18px;
+  font-weight: 600;
+  text-align: center;
+  border: 2px solid ${({ theme }) => theme.colors.border};
+  border-radius: ${LAYOUT.BORDER_RADIUS};
+  background: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+  transition: border-color 0.2s ease;
+
+  &:focus {
+    outline: none;
+    border-color: ${({ theme }) => theme.colors.primary};
+  }
+
+  &::-webkit-inner-spin-button,
+  &::-webkit-outer-spin-button {
+    opacity: 1;
+  }
+`;
