@@ -5,6 +5,7 @@ import { themes, getThemeColors } from '../theme';
 import { useTheme, watchSystemTheme } from '../hooks/useTheme';
 import { ThemeContext } from '../context/ThemeContext';
 import { getSystemThemePreference, applyThemeCSS } from '../utils/themeUtils';
+import { ThemeProvider as StyledThemeProvider } from 'styled-components';
 
 // Theme provider props
 export interface ThemeProviderProps {
@@ -77,9 +78,17 @@ export function ThemeProvider({
     isDark
   };
 
+  // Create theme object that includes both flat properties and nested colors for compatibility
+  const styledTheme = {
+    ...contextValue.colors,
+    colors: contextValue.colors,
+  };
+
   return (
     <ThemeContext.Provider value={contextValue}>
-      {children}
+      <StyledThemeProvider theme={styledTheme}>
+        {children}
+      </StyledThemeProvider>
     </ThemeContext.Provider>
   );
 }

@@ -186,15 +186,23 @@ export function countTotalSpritzes(
     }
   });
   
-  // Count active Spritzes based on mode
+// Count active Spritzes based on mode
   let activeSpritzes = 0;
 
   if (mode === 'normal') {
-    // In normal mode, count selected Spritze types
-    activeSpritzes = spritzeState.selectedTypes?.length ?? 0;
+    // In normal mode, count selected Spritze types + announcements
+    const typeSpritzes = spritzeState.selectedTypes?.length ?? 0;
+    // Count both announcedBy (current round) and activeAnnouncements (carry-overs from previous rounds)
+    const currentAnnouncements = spritzeState.announcedBy?.length ?? 0;
+    const activeAnnouncements = spritzeState.activeAnnouncements?.length ?? 0;
+    activeSpritzes = typeSpritzes + currentAnnouncements + activeAnnouncements;
   } else {
-    // In custom mode, use the custom count
-    activeSpritzes = spritzeState.customCount ?? 0;
+    // In custom mode, use custom count + announcements
+    const customSpritzes = spritzeState.customCount ?? 0;
+    // Count both announcedBy (current round) and activeAnnouncements (carry-overs from previous rounds)
+    const currentAnnouncements = spritzeState.announcedBy?.length ?? 0;
+    const activeAnnouncements = spritzeState.activeAnnouncements?.length ?? 0;
+    activeSpritzes = customSpritzes + currentAnnouncements + activeAnnouncements;
   }
   
   // Validate active spritze count
@@ -242,14 +250,38 @@ export function isValidSpritzeState(
       return false;
     }
     // Validate array content using constant array to prevent circular dependency
-    return Array.isArray(spritzeState.selectedTypes) && 
+    const validTypes = Array.isArray(spritzeState.selectedTypes) && 
            spritzeState.selectedTypes.every(type => VALID_SPRITZE_TYPES.includes(type));
+    
+    // Validate announcements array (can be undefined or array of strings)
+    const validAnnouncements = spritzeState.announcedBy === undefined || 
+      (Array.isArray(spritzeState.announcedBy) && 
+       spritzeState.announcedBy.every(id => typeof id === 'string'));
+    
+    // Validate active announcements array (can be undefined or array of strings)
+    const validActiveAnnouncements = spritzeState.activeAnnouncements === undefined || 
+      (Array.isArray(spritzeState.activeAnnouncements) && 
+       spritzeState.activeAnnouncements.every(id => typeof id === 'string'));
+    
+    return validTypes && validAnnouncements && validActiveAnnouncements;
   } else {
     if (spritzeState.customCount === undefined || spritzeState.selectedTypes !== undefined) {
       return false;
     }
     // Validate custom count
-    return Number.isInteger(spritzeState.customCount) && spritzeState.customCount >= 0;
+    const validCustomCount = Number.isInteger(spritzeState.customCount) && spritzeState.customCount >= 0;
+    
+    // Validate announcements array (can be undefined or array of strings)
+    const validAnnouncements = spritzeState.announcedBy === undefined || 
+      (Array.isArray(spritzeState.announcedBy) && 
+       spritzeState.announcedBy.every(id => typeof id === 'string'));
+    
+    // Validate active announcements array (can be undefined or array of strings)
+    const validActiveAnnouncements = spritzeState.activeAnnouncements === undefined || 
+      (Array.isArray(spritzeState.activeAnnouncements) && 
+       spritzeState.activeAnnouncements.every(id => typeof id === 'string'));
+    
+    return validCustomCount && validAnnouncements && validActiveAnnouncements;
   }
 }
 

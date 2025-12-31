@@ -194,7 +194,7 @@ export function useGameState(): UseGameStateReturn {
 
       // Create initial game state
       const players = createPlayers(config);
-      const newRound = createNewRound([]);
+      const newRound = createNewRound([], config.spritzeMode);
 
       const newGameState: GameState = {
         id: generateGameId(),
@@ -287,7 +287,7 @@ export function useGameState(): UseGameStateReturn {
         );
       }
 
-      const newRound = createNewRound(gameState.rounds);
+      const newRound = createNewRound(gameState.rounds, gameState.config.spritzeMode);
       const updatedGameState = {
         ...gameState,
         rounds: [...gameState.rounds, newRound],

@@ -1,11 +1,11 @@
 import type { GameState, Round, PlayerRoundResult } from '../types';
 import { calculateRoundPoints, countTotalSpritzes } from './scoreCalculator';
 import { calculatePositions } from './positionCalculator';
-import { generateCarryOverSpritzes } from './spritzeManager';
+import { generateAnnouncementCarryOvers } from './spritzeManager';
 
 // Constants for round management
 const MAX_ROUNDS = 1000; // Prevent excessive game length
-const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
+const UUID_REGEX = /^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$/i;
 
 export class RoundManagerError extends Error {
   name = 'RoundManagerError';
@@ -69,10 +69,11 @@ function generateRoundId(): string {
  * Create a new round with incremented round number.
  * 
  * @param currentRounds - Array of existing rounds
+ * @param spritzeMode - Game spritze mode to initialize proper default state
  * @returns New round object with incremented number
  * @throws {RoundManagerError} When input validation fails
  */
-export function createNewRound(currentRounds: Round[]): Round {
+export function createNewRound(currentRounds: Round[], spritzeMode?: 'normal' | 'custom'): Round {
   // Input validation
   if (!Array.isArray(currentRounds)) {
     throw new RoundManagerError(
@@ -121,12 +122,16 @@ export function createNewRound(currentRounds: Round[]): Round {
     ? 1
     : Math.max(...currentRounds.map(r => r.roundNumber)) + 1;
 
-  // Create new round
+  // Create new round with proper default spritze state based on mode
+  const defaultSpritzeState = spritzeMode === 'custom' 
+    ? { customCount: 0 }
+    : { selectedTypes: [] };
+
   const newRound: Round = {
     id: generateRoundId(),
     roundNumber: nextRoundNumber,
     winners: [],
-    spritzeState: {},
+    spritzeState: defaultSpritzeState,
     carryOverSpritzes: [],
     isAccepted: false,
     pointsAwarded: null,
@@ -195,9 +200,14 @@ export function acceptRound(gameState: GameState, roundIndex: number): GameState
   // Calculate points awarded for the round
   const pointsAwarded = calculateRoundPoints(totalSpritzes);
 
-  // Generate carry-over spritzes for losers
+  // Generate carry-over spritzes ONLY for failed announcements
+  // According to requirements: "If a player that 'spritzes' (= gives a Spritz) looses, 
+  // the Spritz is counted for the next two rounds as well."
+  // Regular losses do NOT generate carry-overs, only announced spritzes that fail
   const allPlayerIds = gameState.players.map(p => p.id);
-  const newCarryOvers = generateCarryOverSpritzes(round, allPlayerIds);
+  const newCarryOvers = generateAnnouncementCarryOvers(round, allPlayerIds);
+  
+  
 
   // Create player results for the round
   const playerResults: PlayerRoundResult[] = gameState.players.map(player => ({
@@ -218,12 +228,22 @@ export function acceptRound(gameState: GameState, roundIndex: number): GameState
   // Recalculate positions based on updated scores
   const playersWithPositions = calculatePositions(updatedPlayers);
 
+  // Move failed announcements to active announcements for the next round
+  // This ensures they are counted as spritzes in the next round
+  const failedAnnouncers = round.spritzeState.announcedBy?.filter(
+    announcerId => !round.winners.includes(announcerId)
+  ) || [];
+
   // Update the accepted round
   const updatedRound: Round = {
     ...round,
     isAccepted: true,
     pointsAwarded,
-    playerResults
+    playerResults,
+    spritzeState: {
+      ...round.spritzeState,
+      activeAnnouncements: failedAnnouncers
+    }
   };
 
   // Update rounds array
@@ -231,37 +251,38 @@ export function acceptRound(gameState: GameState, roundIndex: number): GameState
     index === roundIndex ? updatedRound : r
   );
 
-  // Process existing carry-overs (decrement counters and filter expired)
-  const updatedRoundsWithProcessedCarryOvers = updatedRounds.map((r, index) => {
-    if (index <= roundIndex) {
-      // Current and previous rounds: process their existing carry-overs
-      const processedCarryOvers = r.carryOverSpritzes
-        .map(carryOver => ({
-          ...carryOver,
-          roundsRemaining: carryOver.roundsRemaining - 1
-        }))
-        .filter(carryOver => carryOver.roundsRemaining > 0);
-      return { ...r, carryOverSpritzes: processedCarryOvers };
-    } else {
-      // Future rounds: keep existing carry-overs for now
-      return r;
-    }
-  });
+  // Don't process future rounds - they shouldn't exist in normal flow
+  // (rounds are created one at a time after acceptance)
+  const roundsWithProcessedCarryOvers = updatedRounds;
 
-  // Add new carry-overs to future rounds
-  const roundsWithCarryOvers = updatedRoundsWithProcessedCarryOvers.map((r, index) => {
-    if (index > roundIndex) {
-      // Future rounds get new carry-overs from the accepted round
-      return { ...r, carryOverSpritzes: [...r.carryOverSpritzes, ...newCarryOvers] };
-    }
-    return r;
-  });
+  // Decrement the carry-overs from the current round for the next round
+  const decrementedCurrentCarryOvers = round.carryOverSpritzes
+    .map(carryOver => ({
+      ...carryOver,
+      roundsRemaining: carryOver.roundsRemaining - 1
+    }))
+    .filter(carryOver => carryOver.roundsRemaining > 0);
+
+  // Create a new round after accepting the current one
+  const newRound = createNewRound(roundsWithProcessedCarryOvers, gameState.config.spritzeMode);
+  
+  // New round gets:
+  // 1. Decremented carry-overs from the current round (if any remain)
+  // 2. New carry-overs generated from the current round
+  const newRoundWithCarryOvers = {
+    ...newRound,
+    carryOverSpritzes: [...decrementedCurrentCarryOvers, ...newCarryOvers]
+  };
+  
+  const roundsWithNewRound = [...roundsWithProcessedCarryOvers, newRoundWithCarryOvers];
+  
+  
 
   return {
     ...gameState,
     players: playersWithPositions,
-    rounds: roundsWithCarryOvers,
-    currentRoundIndex: gameState.currentRoundIndex,
+    rounds: roundsWithNewRound,
+    currentRoundIndex: roundsWithNewRound.length - 1,
     updatedAt: new Date().toISOString()
   };
 }

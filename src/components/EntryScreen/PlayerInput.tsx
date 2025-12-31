@@ -1,7 +1,14 @@
 import React from 'react';
-import styled from 'styled-components';
 import { useThemeContext } from '../../context/ThemeContext';
 import { validation } from '../../constants';
+import {
+  Container,
+  InputGroup,
+  Label,
+  TextInput,
+  ColorPicker,
+  ErrorMessage
+} from './PlayerInput.styles';
 
 interface PlayerInputProps {
   playerNumber: number;
@@ -12,74 +19,7 @@ interface PlayerInputProps {
   hasError?: boolean;
 }
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 16px;
-  background: ${props => props.theme.colors.surface};
-  border: 1px solid ${props => props.theme.colors.border};
-  border-radius: 8px;
-  box-shadow: ${props => props.theme.shadow};
-`;
 
-const InputGroup = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 12px;
-`;
-
-const Label = styled.label`
-  font-size: 14px;
-  font-weight: 500;
-  color: ${props => props.theme.colors.text};
-  min-width: 80px;
-`;
-
-const TextInput = styled.input<{ $hasError?: boolean }>`
-  flex: 1;
-  padding: 8px 12px;
-  border: 1px solid ${props => props.$hasError ? props.theme.colors.error : props.theme.colors.border};
-  border-radius: 4px;
-  font-size: 14px;
-  color: ${props => props.theme.colors.text};
-  background: ${props => props.theme.colors.card};
-  
-  &:focus {
-    outline: none;
-    border-color: ${props => props.$hasError ? props.theme.colors.error : props.theme.colors.primary};
-    box-shadow: 0 0 0 2px ${props => props.$hasError ? 'rgba(252, 129, 129, 0.2)' : 'rgba(49, 130, 206, 0.2)'};
-  }
-  
-  &::placeholder {
-    color: ${props => props.theme.colors.textMuted};
-  }
-`;
-
-const ColorPicker = styled.input`
-  width: 40px;
-  height: 40px;
-  border: 2px solid ${props => props.theme.colors.border};
-  border-radius: 4px;
-  cursor: pointer;
-  background: none;
-  
-  &:hover {
-    border-color: ${props => props.theme.colors.primary};
-  }
-  
-  &:focus {
-    outline: none;
-    border-color: ${props => props.theme.colors.primary};
-    box-shadow: 0 0 0 2px rgba(49, 130, 206, 0.2);
-  }
-`;
-
-const ErrorMessage = styled.div`
-  font-size: 12px;
-  color: ${props => props.theme.colors.error};
-  margin-top: 4px;
-`;
 
 
 

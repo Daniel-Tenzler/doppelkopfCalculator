@@ -112,62 +112,62 @@ This plan implements a React-based scoring companion for Doppelkopf card games. 
     - Theme toggle switch
     - _Requirements: 2.1, 8.3, 9.3_
 
-- [ ] 13. Game table components
+- [x] 13. Game table components
   - [ ] 13.1 Implement RoundNumber component
     - Create `src/components/GameScreen/RoundNumber.tsx`
     - Display round number
     - Hover: show accept button (current round) or reset button (previous round)
     - _Requirements: 3.2, 3.4_
 
-  - [ ] 13.2 Implement PlayerCell component
+  - [x] 13.2 Implement PlayerCell component
     - Create `src/components/GameScreen/PlayerCell.tsx`
     - Active round: checkbox for winner selection
     - Accepted round: display points or "-"
     - _Requirements: 4.1, 4.3, 4.4_
 
-  - [ ] 13.3 Implement SpritzeDisplay component
+  - [x] 13.3 Implement SpritzeDisplay component
     - Create `src/components/GameScreen/SpritzeDisplay.tsx`
     - Show active Spritzes and carry-over Spritzes
     - Normal mode: list of Spritze types
     - Custom mode: numeric count
     - _Requirements: 5.5, 6.2_
 
-  - [ ] 13.4 Implement SpritzeCheckboxes component
+  - [x] 13.4 Implement SpritzeCheckboxes component
     - Create `src/components/GameScreen/SpritzeCheckboxes.tsx`
     - Checkboxes for all predefined Spritze types
     - Only rendered in Normal mode
     - Disabled when round is accepted
     - _Requirements: 5.1, 5.2, 5.3, 5.4, 6.4_
 
-  - [ ] 13.5 Implement RoundRow component
+  - [x] 13.5 Implement RoundRow component
     - Create `src/components/GameScreen/RoundRow.tsx`
     - Compose: RoundNumber, PlayerCell (×4), SpritzeDisplay, SpritzeCheckboxes
     - Handle winner toggle, Spritze changes, accept/reset actions
     - _Requirements: 3.1, 4.2_
 
-- [ ] 14. Game table assembly
-  - [ ] 14.1 Implement GameTable component
+- [x] 14. Game table assembly
+  - [x] 14.1 Implement GameTable component
     - Create `src/components/GameScreen/GameTable.tsx`
     - Render TableHeader and RoundRow for each round
     - 7-column layout as specified
     - _Requirements: Game Table layout from design_
 
-  - [ ] 14.2 Implement GameScreen component
+  - [x] 14.2 Implement GameScreen component
     - Create `src/components/GameScreen/index.tsx`
     - Two-column layout: PlayerSidebar (left), GameTable (right)
     - Wire up all state handlers from useGameState
     - _Requirements: Game Screen Layout from design_
 
-- [ ] 15. App integration
-  - [ ] 15.1 Implement App component
+- [x] 15. App integration
+  - [x] 15.1 Implement App component
     - Update `src/App.tsx`
     - Check localStorage for existing game on mount
     - Route to EntryScreen or GameScreen based on game state
     - Wrap with ThemeProvider
     - _Requirements: 1.5, 8.2_
 
-- [ ] 16. Round reset functionality
-  - [ ] 16.1 Implement round reset integration
+- [x] 16. Round reset functionality
+  - [x] 16.1 Implement round reset integration
     - Wire reset button to resetLastRound in useGameState
     - Ensure carry-over removal and score recalculation
     - _Requirements: 3.5, 3.6, 3.7, 3.8_

@@ -24,12 +24,17 @@ export interface SpritzeState {
   selectedTypes?: SpritzeType[];
   // Custom mode
   customCount?: number;
+  // Player-specific announcements
+  announcedBy?: string[]; // Player IDs who announced they would win
+  // Active announcements (those that should count as spritzes)
+  activeAnnouncements?: string[]; // Player IDs with active announcements
 }
 
 export interface CarryOverSpritze {
   playerId: string;
   roundsRemaining: number;
   originRoundIndex: number;
+  type: 'loss' | 'announcement'; // Type of carry-over
 }
 
 export interface PlayerRoundResult {

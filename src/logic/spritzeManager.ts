@@ -142,7 +142,8 @@ export function generateCarryOverSpritzes(
   const carryOvers: CarryOverSpritze[] = losers.map(loserId => ({
     playerId: loserId,
     roundsRemaining: CARRY_OVER_DURATION,
-    originRoundIndex: round.roundNumber - 1 // 0-based index
+    originRoundIndex: round.roundNumber - 1, // 0-based index
+    type: 'loss' as const
   }));
   
   return carryOvers;
@@ -224,7 +225,8 @@ export function processCarryOverSpritzes(carryOvers: CarryOverSpritze[]): CarryO
       processedCarryOvers.push({
         playerId: carryOver.playerId,
         roundsRemaining: newRoundsRemaining,
-        originRoundIndex: carryOver.originRoundIndex
+        originRoundIndex: carryOver.originRoundIndex,
+        type: carryOver.type
       });
     }
   }
@@ -377,4 +379,213 @@ export function getTotalCarryOverCount(carryOvers: CarryOverSpritze[]): number {
   }
   
   return carryOvers.length;
+}
+
+/**
+ * Generate carry-over Spritzes for failed announcements.
+ * When a player announces they will win but loses, they get a carry-over Spritze for 2 subsequent rounds.
+ * 
+ * @param round - The round to check for failed announcements
+ * @param allPlayerIds - Array of all player IDs in the game
+ * @returns Array of carry-over Spritzes for failed announcements
+ * @throws {SpritzeManagerError} When input validation fails
+ */
+export function generateAnnouncementCarryOvers(
+  round: Round,
+  allPlayerIds: string[]
+): CarryOverSpritze[] {
+  // Input validation (reuse existing validation logic)
+  if (!round || typeof round !== 'object') {
+    throw new SpritzeManagerError(
+      'round must be a valid object',
+      createErrorContext('generateAnnouncementCarryOvers', { round })
+    );
+  }
+  
+  if (!Array.isArray(allPlayerIds)) {
+    throw new SpritzeManagerError(
+      'allPlayerIds must be an array',
+      createErrorContext('generateAnnouncementCarryOvers', { allPlayerIds })
+    );
+  }
+  
+  if (allPlayerIds.length === 0) {
+    throw new SpritzeManagerError(
+      'allPlayerIds cannot be empty',
+      createErrorContext('generateAnnouncementCarryOvers', { playerCount: 0 })
+    );
+  }
+  
+  // Validate round structure
+  if (!round.id || typeof round.id !== 'string') {
+    throw new SpritzeManagerError(
+      'round must have a valid id',
+      createErrorContext('generateAnnouncementCarryOvers', { roundId: round.id })
+    );
+  }
+  
+  if (!Number.isInteger(round.roundNumber) || round.roundNumber < 1) {
+    throw new SpritzeManagerError(
+      'round must have a valid roundNumber (positive integer)',
+      createErrorContext('generateAnnouncementCarryOvers', { 
+        roundNumber: round.roundNumber 
+      })
+    );
+  }
+  
+  if (!Array.isArray(round.winners)) {
+    throw new SpritzeManagerError(
+      'round.winners must be an array',
+      createErrorContext('generateAnnouncementCarryOvers', { 
+        roundId: round.id,
+        winners: round.winners
+      })
+    );
+  }
+  
+  // Validate all winner IDs exist in allPlayerIds
+  const invalidWinners = round.winners.filter(winnerId => !allPlayerIds.includes(winnerId));
+  if (invalidWinners.length > 0) {
+    throw new SpritzeManagerError(
+      'round.winners contains invalid player IDs',
+      createErrorContext('generateAnnouncementCarryOvers', { 
+        invalidWinners,
+        validPlayerIds: allPlayerIds
+      })
+    );
+  }
+  
+  const announcedBy = round.spritzeState.announcedBy || [];
+  const winners = round.winners || [];
+  
+  
+  
+  // Validate announcedBy contains only valid player IDs
+  const invalidAnnouncers = announcedBy.filter(announcerId => !allPlayerIds.includes(announcerId));
+  if (invalidAnnouncers.length > 0) {
+    throw new SpritzeManagerError(
+      'announcedBy contains invalid player IDs',
+      createErrorContext('generateAnnouncementCarryOvers', { 
+        invalidAnnouncers,
+        validPlayerIds: allPlayerIds 
+      })
+    );
+  }
+  
+  // Validate announcedBy is an array of strings
+  if (!Array.isArray(announcedBy)) {
+    throw new SpritzeManagerError(
+      'spritzeState.announcedBy must be an array',
+      createErrorContext('generateAnnouncementCarryOvers', { announcedBy })
+    );
+  }
+  
+  
+  
+  // Optimize with Sets for O(1) lookups
+  const playerIdSet = new Set(allPlayerIds);
+  const winnerSet = new Set(winners);
+  
+  // Find players who announced but didn't win
+  const failedAnnouncers = announcedBy.filter(announcerId => 
+    playerIdSet.has(announcerId) && !winnerSet.has(announcerId)
+  );
+  
+  // Generate carry-over Spritze for each failed announcer
+  const announcementCarryOvers: CarryOverSpritze[] = failedAnnouncers.map(playerId => ({
+    playerId,
+    roundsRemaining: CARRY_OVER_DURATION,
+    originRoundIndex: round.roundNumber - 1, // 0-based index
+    type: 'announcement' as const
+  }));
+  
+  return announcementCarryOvers;
+}
+
+/**
+ * Deduplicate carry-over Spritzes when players both lose and have announcements.
+ * Players who both lose and announce should only get one carry-over (loss takes priority).
+ * 
+ * @param lossCarryOvers - Carry-overs from losing
+ * @param announcementCarryOvers - Carry-overs from failed announcements
+ * @returns Deduplicated array of carry-overs
+ * @throws {SpritzeManagerError} When input validation fails
+ */
+export function deduplicateCarryOvers(
+  lossCarryOvers: CarryOverSpritze[],
+  announcementCarryOvers: CarryOverSpritze[]
+): CarryOverSpritze[] {
+  // Input validation
+  if (!Array.isArray(lossCarryOvers)) {
+    throw new SpritzeManagerError(
+      'lossCarryOvers must be an array',
+      createErrorContext('deduplicateCarryOvers', { lossCarryOvers })
+    );
+  }
+
+  if (!Array.isArray(announcementCarryOvers)) {
+    throw new SpritzeManagerError(
+      'announcementCarryOvers must be an array',
+      createErrorContext('deduplicateCarryOvers', { announcementCarryOvers })
+    );
+  }
+
+  // DoS protection: prevent excessive carry-over arrays
+  if (lossCarryOvers.length > MAX_CARRY_OVERS) {
+    throw new SpritzeManagerError(
+      `lossCarryOvers array exceeds maximum allowed size`,
+      createErrorContext('deduplicateCarryOvers', { 
+        carryOverCount: lossCarryOvers.length,
+        maxLimit: MAX_CARRY_OVERS
+      })
+    );
+  }
+
+  if (announcementCarryOvers.length > MAX_CARRY_OVERS) {
+    throw new SpritzeManagerError(
+      `announcementCarryOvers array exceeds maximum allowed size`,
+      createErrorContext('deduplicateCarryOvers', { 
+        carryOverCount: announcementCarryOvers.length,
+        maxLimit: MAX_CARRY_OVERS
+      })
+    );
+  }
+
+  // Create a Map of playerId -> carryOver for loss carry-overs (priority)
+  const lossMap = new Map<string, CarryOverSpritze>();
+  lossCarryOvers.forEach(co => {
+    // Validate each carry-over
+    if (!co.playerId || typeof co.playerId !== 'string') {
+      throw new SpritzeManagerError(
+        'Invalid playerId in loss carry-over',
+        createErrorContext('deduplicateCarryOvers', { carryOver: co })
+      );
+    }
+    lossMap.set(co.playerId, {
+      ...co,
+      type: 'loss' as const // Ensure type is set
+    });
+  });
+
+  // Only add announcement carry-overs for players not in loss map
+  const uniqueCarryOvers: CarryOverSpritze[] = [...lossMap.values()];
+  
+  announcementCarryOvers.forEach(co => {
+    // Validate each carry-over
+    if (!co.playerId || typeof co.playerId !== 'string') {
+      throw new SpritzeManagerError(
+        'Invalid playerId in announcement carry-over',
+        createErrorContext('deduplicateCarryOvers', { carryOver: co })
+      );
+    }
+
+    if (!lossMap.has(co.playerId)) {
+      uniqueCarryOvers.push({
+        ...co,
+        type: 'announcement' as const // Ensure type is set
+      });
+    }
+  });
+
+  return uniqueCarryOvers;
 }

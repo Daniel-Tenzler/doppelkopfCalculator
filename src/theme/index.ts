@@ -171,10 +171,7 @@ export const defaultTheme: DoppelkopfTheme = {
 
 // Extend DefaultTheme for styled-components
 declare module 'styled-components' {
-  export interface DefaultTheme {
+  export interface DefaultTheme extends ColorPalette {
     colors: ColorPalette;
-    shadow: string;
-    shadowLight: string;
-    shadowHeavy: string;
   }
 }

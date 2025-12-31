@@ -1,98 +1,25 @@
 import React, { useState, useCallback } from 'react';
-import styled from 'styled-components';
 import { PlayerInput } from './PlayerInput';
 import { SpritzeModeSelector } from './SpritzeModeSelector';
 import type { GameConfig, PlayerConfig, SpritzeType } from '../../types';
 import { useThemeContext } from '../../context/ThemeContext';
 import { defaultPlayerColors, defaultEnabledTypes, validation } from '../../constants';
+import {
+  Container,
+  Card,
+  Header,
+  Title,
+  Subtitle,
+  PlayersSection,
+  SectionTitle,
+  PlayersGrid,
+  Button,
+  ButtonGroup
+} from './EntryScreen.styles';
 
 interface EntryScreenProps {
   onGameStart: (config: GameConfig) => void;
 }
-
-const Container = styled.div`
-  min-height: 100vh;
-  background: ${props => props.theme.colors.background};
-  padding: 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const Card = styled.div`
-  background: ${props => props.theme.colors.surface};
-  border-radius: 12px;
-  box-shadow: ${props => props.theme.shadowHeavy};
-  padding: 32px;
-  max-width: 800px;
-  width: 100%;
-  border: 1px solid ${props => props.theme.colors.border};
-`;
-
-const Header = styled.div`
-  text-align: center;
-  margin-bottom: 32px;
-`;
-
-const Title = styled.h1`
-  font-size: 32px;
-  font-weight: 700;
-  color: ${props => props.theme.colors.text};
-  margin: 0 0 8px 0;
-`;
-
-const Subtitle = styled.p`
-  font-size: 16px;
-  color: ${props => props.theme.colors.textSecondary};
-  margin: 0;
-`;
-
-const PlayersSection = styled.div`
-  margin-bottom: 24px;
-`;
-
-const SectionTitle = styled.h2`
-  font-size: 20px;
-  font-weight: 600;
-  color: ${props => props.theme.colors.text};
-  margin: 0 0 16px 0;
-`;
-
-const PlayersGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 16px;
-`;
-
-const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
-  padding: 12px 24px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  background: ${props => props.$variant === 'secondary' ? 'transparent' : props.theme.colors.primary};
-  color: ${props => props.$variant === 'secondary' ? props.theme.colors.primary : props.theme.colors.textOnSurface};
-  border: ${props => props.$variant === 'secondary' ? `1px solid ${props.theme.colors.primary}` : 'none'};
-  
-  &:hover {
-    background: ${props => props.$variant === 'secondary' ? props.theme.colors.surface : props.theme.colors.primaryHover};
-  }
-  
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-`;
-
-const ButtonGroup = styled.div`
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  margin-top: 32px;
-`;
-
 
 
 export const EntryScreen: React.FC<EntryScreenProps> = ({ onGameStart }) => {
