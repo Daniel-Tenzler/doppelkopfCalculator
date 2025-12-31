@@ -16,6 +16,7 @@ export interface GameConfig {
   players: PlayerConfig[];
   spritzeMode: 'normal' | 'custom';
   enabledSpritzeTypes?: SpritzeType[]; // Normal mode only
+  customSpritzeCount?: number; // Custom mode only
 }
 
 export interface SpritzeState {

@@ -23,22 +23,22 @@ This plan implements a React-based scoring companion for Doppelkopf card games. 
     - Implement `countTotalSpritzes(spritzeState, carryOverSpritzes, mode): number`
     - _Requirements: 7.1, 7.2, 7.3_
 
-- [ ] 3. Position calculation module
-  - [ ] 3.1 Implement position calculation
+- [x] 3. Position calculation module
+  - [x] 3.1 Implement position calculation
     - Create `src/logic/positionCalculator.ts`
     - Implement `calculatePositions(players: Player[]): Player[]` - assigns positions based on score ranking with tie handling
     - _Requirements: 2.3, 2.5_
 
-- [ ] 4. Carry-over Spritze module
-  - [ ] 4.1 Implement carry-over Spritze logic
+- [x] 4. Carry-over Spritze module
+  - [x] 4.1 Implement carry-over Spritze logic
     - Create `src/logic/spritzeManager.ts`
     - Implement `generateCarryOverSpritzes(round, allPlayerIds): CarryOverSpritze[]` - creates carry-over for each loser
     - Implement `processCarryOverSpritzes(carryOvers): CarryOverSpritze[]` - decrements counters, filters expired
     - Implement `removeCarryOversFromRound(carryOvers, originRoundIndex): CarryOverSpritze[]`
     - _Requirements: 7.5, 3.7_
 
-- [ ] 5. Round management module
-  - [ ] 5.1 Implement round management functions
+- [x] 5. Round management module
+  - [x] 5.1 Implement round management functions
     - Create `src/logic/roundManager.ts`
     - Implement `createNewRound(currentRounds): Round` - creates round with incremented number
     - Implement `acceptRound(gameState, roundIndex): GameState` - finalizes round, calculates scores, generates carry-overs
@@ -46,11 +46,11 @@ This plan implements a React-based scoring companion for Doppelkopf card games. 
     - Implement `canResetRound(gameState, roundIndex): boolean` - validates only last round can be reset
     - _Requirements: 3.1, 3.3, 3.5, 3.6, 3.7, 3.8, 4.5_
 
-- [ ] 6. Checkpoint - Verify Core logic
+- [x] 6. Checkpoint - Verify Core logic
   - Review implementation of core logic modules.
 
-- [ ] 7. Persistence module
-  - [ ] 7.1 Implement local storage service
+- [x] 7. Persistence module
+  - [x] 7.1 Implement local storage service
     - Create `src/services/localStorage.ts`
     - Implement `saveGameState(state: GameState): void`
     - Implement `loadGameState(): GameState | null`
@@ -60,52 +60,52 @@ This plan implements a React-based scoring companion for Doppelkopf card games. 
     - Handle JSON parse errors gracefully
     - _Requirements: 8.1, 8.2, 8.4, 9.5_
 
-- [ ] 8. Game state hook
-  - [ ] 8.1 Implement useGameState hook
+- [x] 8. Game state hook
+  - [x] 8.1 Implement useGameState hook
     - Create `src/hooks/useGameState.ts`
     - Manage game state with useState
     - Auto-persist to localStorage on state changes
     - Expose: gameState, startGame, addRound, toggleWinner, updateSpritze, acceptRound, resetRound, resetGame
     - _Requirements: 3.1, 3.3, 3.5, 4.1, 5.2, 6.2_
 
-- [ ] 9. Theme provider
-  - [ ] 9.1 Implement theme system
+- [x] 9. Theme provider
+  - [x] 9.1 Implement theme system
     - Create `src/theme/index.ts` with light and dark theme objects
     - Create `src/hooks/useTheme.ts` hook for theme management
     - Create `src/components/ThemeProvider.tsx` wrapper component
     - Define paper-like color palette for both themes
     - _Requirements: 9.1, 9.3, 9.4_
 
-- [ ] 10. Entry screen components
-  - [ ] 10.1 Implement PlayerInput component
+- [x] 10. Entry screen components
+  - [x] 10.1 Implement PlayerInput component
     - Create `src/components/EntryScreen/PlayerInput.tsx`
     - Text input for name, color picker for player color
     - Validation state display for empty names
     - _Requirements: 1.1, 1.2, 1.6_
 
-  - [ ] 10.2 Implement SpritzeModeSelector component
+  - [x] 10.2 Implement SpritzeModeSelector component
     - Create `src/components/EntryScreen/SpritzeModeSelector.tsx`
     - Radio buttons for Normal/Custom mode
     - Checkboxes for Spritze types in Normal mode
     - _Requirements: 1.3, 1.4_
 
-  - [ ] 10.3 Implement EntryScreen component
+  - [x] 10.3 Implement EntryScreen component
     - Create `src/components/EntryScreen/index.tsx`
     - Compose PlayerInput (×4) and SpritzeModeSelector
     - Form validation: all names required
     - Submit handler calls onGameStart with GameConfig
     - _Requirements: 1.1, 1.5, 1.6_
 
-- [ ] 11. Checkpoint - Entry screen functional
+- [x] 11. Checkpoint - Entry screen functional
   - Review implementation of entry screen components.
 
-- [ ] 12. Game screen sidebar
-  - [ ] 12.1 Implement PlayerCard component
+- [x] 12. Game screen sidebar
+  - [x] 12.1 Implement PlayerCard component
     - Create `src/components/GameScreen/PlayerCard.tsx`
     - Display player name, color indicator, total score, position
     - _Requirements: 2.1, 2.2, 2.3_
 
-  - [ ] 12.2 Implement PlayerSidebar component
+  - [x] 12.2 Implement PlayerSidebar component
     - Create `src/components/GameScreen/PlayerSidebar.tsx`
     - Render PlayerCard for each player
     - Reset button with confirmation overlay
