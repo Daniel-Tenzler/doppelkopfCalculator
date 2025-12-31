@@ -13,7 +13,7 @@ export const COMPONENT_SIZES = {
   CHECKBOX_SIZE: '22px',
   SMALL_CHECKBOX_SIZE: '16px',
   MIN_CELL_HEIGHT: '56px',
-  SIDEBAR_WIDTH: '360px',
+  SIDEBAR_WIDTH: '260px',
   TABLE_MIN_HEIGHT: '400px',
 } as const;
 

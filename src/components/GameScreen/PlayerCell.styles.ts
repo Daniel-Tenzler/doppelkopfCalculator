@@ -8,7 +8,7 @@ interface PlayerCellPropsInternal {
 }
 
 export const PlayerCellContainer = styled.div<PlayerCellPropsInternal>`
-  padding: 12px 16px;
+  padding: 12px 2px;
   text-align: center;
   background: ${({ $isWinner, $hasPoints, $isCurrentRound, theme }) => {
     // Current round: green if winner selected, default surface otherwise
@@ -71,5 +71,5 @@ export const PlayerName = styled.span`
   color: ${({ theme }) => theme.colors.text};
   text-align: center;
   word-break: break-word;
-  padding: 0 8px;
+  padding: 0;
 `;
