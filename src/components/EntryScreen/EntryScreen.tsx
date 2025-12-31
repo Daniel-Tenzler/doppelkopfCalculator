@@ -9,7 +9,6 @@ import {
   Card,
   Header,
   Title,
-  Subtitle,
   PlayersSection,
   SectionTitle,
   PlayersGrid,
@@ -112,13 +111,12 @@ export const EntryScreen: React.FC<EntryScreenProps> = ({ onGameStart }) => {
     <Container>
       <Card>
         <Header>
-          <Title>Doppelkopf Scorer</Title>
-          <Subtitle>Track your Doppelkopf games with ease</Subtitle>
+          <Title>Doppelkopf Rechner</Title>
         </Header>
 
         <form onSubmit={handleSubmit}>
           <PlayersSection>
-            <SectionTitle>Players</SectionTitle>
+            <SectionTitle>Spieler</SectionTitle>
             <PlayersGrid>
               {players.map((player, index) => (
                 <PlayerInput

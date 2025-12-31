@@ -104,7 +104,6 @@ export const SpritzeCheckboxes: React.FC<SpritzeCheckboxesProps> = ({
 
       {/* Player Announcement Checkboxes */}
       <AnnounceSection>
-        <StatusText>Announced by:</StatusText>
         <AnnounceGroup>
           {players.map(player => (
             <CheckboxLabel key={`announce-${player.id}`} $disabled={isLocked}>
@@ -116,7 +115,7 @@ export const SpritzeCheckboxes: React.FC<SpritzeCheckboxesProps> = ({
                 title={`${player.name} announced they would win`}
               />
               <SpritzeLabel title={`${player.name} announced they would win`}>
-                {player.name.substring(0, 1)}
+                {player.name.substring(0, 5)}
               </SpritzeLabel>
             </CheckboxLabel>
           ))}

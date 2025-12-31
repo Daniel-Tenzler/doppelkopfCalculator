@@ -26,10 +26,12 @@ export const GameScreenContainer = styled.div`
   max-width: ${LAYOUT.CONTAINER_MAX_WIDTH};
   margin: 0 auto;
   position: relative;
+  width: 100%;
+  box-sizing: border-box;
   
   @media (max-width: 1200px) {
     gap: 24px;
-    padding: 32px 24px;
+    padding: 0 24px;
   }
   
   @media (max-width: 1024px) {

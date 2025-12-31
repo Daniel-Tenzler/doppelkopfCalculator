@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 import type { GameState, SpritzeState } from '../../types';
-import { useTheme } from '../../hooks/useTheme';
+import { useThemeContext } from '../../context/ThemeContext';
 import { PlayerSidebar } from './PlayerSidebar';
 import { GameTable } from './GameTable';
 import {
@@ -38,7 +38,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
   acceptRound,
   resetRound,
 }) => {
-  const { theme, toggleTheme } = useTheme();
+  const { currentTheme, toggleTheme } = useThemeContext();
 
   // Handler for winner toggle in a specific round
   const handleWinnerToggle = useCallback((roundIndex: number, playerId: string) => {
@@ -102,7 +102,7 @@ export const GameScreen: React.FC<GameScreenProps> = ({
           players={gameState.players}
           onReset={onReset}
           onThemeToggle={toggleTheme}
-          currentTheme={theme}
+          currentTheme={currentTheme}
         />
       </SidebarContainer>
 

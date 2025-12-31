@@ -221,14 +221,14 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
           </PlayerHeaderCell>
         ))}
         
-        <HeaderCell $width={COMPONENT_SIZES.SPRITZE_DISPLAY_WIDTH}>
+        <HeaderCell $width={COMPONENT_SIZES.SPRITZE_DISPLAY_WIDTH} $start={true}>
           Spritzen
         </HeaderCell>
         
         {/* Spritze Controls Header - only show in normal mode */}
         {spritzeMode === 'normal' && (
-          <HeaderCell $width={COMPONENT_SIZES.SPRITZE_CONTROLS_WIDTH}>
-            Controls
+          <HeaderCell $width={COMPONENT_SIZES.SPRITZE_CONTROLS_WIDTH} $start={true}>
+            Eingabe
           </HeaderCell>
         )}
       </TableHeader>

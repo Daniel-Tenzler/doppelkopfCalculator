@@ -29,7 +29,6 @@ export interface ThemeProviderProps {
  */
 export function ThemeProvider({ 
   children, 
-  defaultTheme: defaultThemeProp = 'light',
   followSystem = false 
 }: ThemeProviderProps): React.JSX.Element {
   const { 
@@ -39,13 +38,6 @@ export function ThemeProvider({
     isLight, 
     isDark 
   } = useTheme();
-
-  // Handle default theme override
-  useEffect(() => {
-    if (defaultThemeProp !== undefined) {
-      setTheme(defaultThemeProp);
-    }
-  }, [defaultThemeProp, setTheme]);
 
   // Handle system preference following
   useEffect(() => {

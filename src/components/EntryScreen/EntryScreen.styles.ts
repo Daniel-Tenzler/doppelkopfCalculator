@@ -7,7 +7,6 @@ export const Container = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  padding: 20px;
   
   @media (max-width: 768px) {
     padding: clamp(12px, 3vw, 16px);
@@ -29,7 +28,7 @@ export const Card = styled.div`
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04);
   padding: 48px;
-  max-width: 1200px;
+  max-width: 800px;
   width: 100%;
   border: 1px solid ${({ theme }) => theme.colors.border};
   backdrop-filter: blur(10px);
@@ -44,12 +43,12 @@ export const Card = styled.div`
   }
   
   @media (max-width: 1400px) {
-    max-width: 1000px;
+    max-width: 800px;
     padding: 44px;
   }
   
   @media (max-width: 1200px) {
-    max-width: 900px;
+    max-width: 700px;
     padding: 40px;
   }
   

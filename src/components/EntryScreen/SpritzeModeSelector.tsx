@@ -1,19 +1,20 @@
 import React from 'react';
 import type { SpritzeType } from '../../types';
 import { useThemeContext } from '../../context/ThemeContext';
-import { spritzeTypeLabels, validation } from '../../constants';
+//import { validation } from '../../constants';
+//import { spritzeTypeLabels } from '../../constants';
 import {
   Container,
   Title,
   RadioGroup,
   RadioLabel,
   RadioInput,
-  CheckboxGroup,
-  CheckboxLabel,
-  CheckboxInput,
-  NumberInput,
-  CustomModeSection,
-  HelperText
+  //CheckboxGroup,
+  //CheckboxLabel,
+  //CheckboxInput,
+  //NumberInput,
+  //CustomModeSection,
+  //HelperText
 } from './SpritzeModeSelector.styles';
 
 interface SpritzeModeSelectorProps {
@@ -29,24 +30,24 @@ interface SpritzeModeSelectorProps {
 
 export const SpritzeModeSelector: React.FC<SpritzeModeSelectorProps> = ({
   mode,
-  enabledTypes,
-  customSpritzeCount = 0,
+  //enabledTypes,
+  //customSpritzeCount = 0,
   onModeChange,
-  onTypeToggle,
-  onCustomCountChange
+  //onTypeToggle,
+  //onCustomCountChange
 }) => {
   useThemeContext(); // Ensure theme context is available for styled components
 
-  const handleCustomCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  /*const handleCustomCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = parseInt(e.target.value) || 0;
     const clampedValue = Math.max(validation.minCustomSpritzeCount, 
                                 Math.min(validation.maxCustomSpritzeCount, value));
     onCustomCountChange(clampedValue);
-  };
+  };*/
 
   return (
     <Container>
-      <Title>Spritze Mode</Title>
+      <Title>Spritzen Modus</Title>
       
       <RadioGroup>
         <RadioLabel>
@@ -57,7 +58,7 @@ export const SpritzeModeSelector: React.FC<SpritzeModeSelectorProps> = ({
             checked={mode === 'normal'}
             onChange={() => onModeChange('normal')}
           />
-          Normal Mode - Select predefined Spritze types
+          Normaler Modus - benutze vordefinierte Spritzen
         </RadioLabel>
         
         <RadioLabel>
@@ -68,11 +69,13 @@ export const SpritzeModeSelector: React.FC<SpritzeModeSelectorProps> = ({
             checked={mode === 'custom'}
             onChange={() => onModeChange('custom')}
           />
-          Custom Mode - Enter numeric Spritze count
+          Benutzerdefinierter Modus - Anzahl der Spritzen eingeben
         </RadioLabel>
       </RadioGroup>
 
-      {mode === 'normal' && (
+
+      {/** currently broken.
+       mode === 'normal' && (
         <CheckboxGroup>
           {(Object.keys(spritzeTypeLabels) as SpritzeType[]).map((type) => (
             <CheckboxLabel key={type}>
@@ -85,11 +88,13 @@ export const SpritzeModeSelector: React.FC<SpritzeModeSelectorProps> = ({
             </CheckboxLabel>
           ))}
         </CheckboxGroup>
-      )}
+      )*/}
+      
 
-      {mode === 'custom' && (
+      {/** currently broken. 
+       mode === 'custom' && (
         <CustomModeSection>
-          <label>Custom Spritze Count:</label>
+          <label>Benutzerdefinierte Spritzen Anzahl:</label>
           <NumberInput
             type="number"
             min={validation.minCustomSpritzeCount}
@@ -101,7 +106,7 @@ export const SpritzeModeSelector: React.FC<SpritzeModeSelectorProps> = ({
             (0-{validation.maxCustomSpritzeCount})
           </HelperText>
         </CustomModeSection>
-      )}
+      )*/}
     </Container>
   );
 };

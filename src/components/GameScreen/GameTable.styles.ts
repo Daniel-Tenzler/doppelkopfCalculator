@@ -41,10 +41,10 @@ export const TableHeader = styled.div`
   letter-spacing: 0.6px;
 `;
 
-export const HeaderCell = styled.div<{ $width?: string }>`
+export const HeaderCell = styled.div<{ $width?: string, $start?: boolean }>`
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: ${({ $start }) => ($start ? 'start' : 'center')};
   text-align: center;
   padding: 16px 12px;
   min-height: ${COMPONENT_SIZES.MIN_CELL_HEIGHT};

@@ -16,10 +16,10 @@ interface PlayerCardProps {
 
 export function PlayerCard({ name, color, totalScore, position }: PlayerCardProps) {
   const getPositionLabel = (pos: number): string => {
-    if (pos === 1) return '1st';
-    if (pos === 2) return '2nd';
-    if (pos === 3) return '3rd';
-    return `${pos}th`;
+    if (pos === 1) return '1';
+    if (pos === 2) return '2';
+    if (pos === 3) return '3';
+    return `4`;
   };
 
   return (

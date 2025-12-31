@@ -37,7 +37,7 @@ export const PlayerInput: React.FC<PlayerInputProps> = ({
   return (
     <Container>
       <InputGroup>
-        <Label>Player {playerNumber}:</Label>
+        <Label>Spieler {playerNumber}:</Label>
         <TextInput
           type="text"
           value={value}
@@ -46,7 +46,7 @@ export const PlayerInput: React.FC<PlayerInputProps> = ({
             const newValue = e.target.value.slice(0, validation.maxPlayerNameLength);
             onNameChange(newValue);
           }}
-          placeholder={`Enter player ${playerNumber} name`}
+          placeholder={`Spieler-${playerNumber}-Namen eingeben`}
           $hasError={hasError}
           maxLength={validation.maxPlayerNameLength}
           pattern={validation.playerNamePattern}

@@ -58,7 +58,7 @@ export function PlayerSidebar({
     return (
       <SidebarContainer>
         <SidebarHeader>
-          <SidebarTitle>Players</SidebarTitle>
+          <SidebarTitle>Spieler</SidebarTitle>
         </SidebarHeader>
         <PlayerList>
           <EmptyState>
@@ -86,7 +86,7 @@ export function PlayerSidebar({
     <>
       <SidebarContainer>
         <SidebarHeader>
-          <SidebarTitle>Players</SidebarTitle>
+          <SidebarTitle>Spieler</SidebarTitle>
         </SidebarHeader>
         
         <PlayerList>
@@ -110,12 +110,12 @@ export function PlayerSidebar({
 
         <ActionSection>
           <ResetButton onClick={handleResetClick}>
-            Reset Game
+            Spiel neustarten
           </ResetButton>
           
           <ThemeToggleContainer>
             <ThemeToggleLabel>
-              {currentTheme === 'light' ? 'Light' : 'Dark'} Mode
+              {currentTheme === 'light' ? 'Hell' : 'Dunkel'} Modus
             </ThemeToggleLabel>
             <ThemeToggle 
               $isDark={currentTheme === 'dark'}
@@ -137,17 +137,16 @@ export function PlayerSidebar({
           aria-describedby="reset-modal-description"
         >
           <Modal>
-            <ModalTitle id="reset-modal-title">Reset Game</ModalTitle>
+            <ModalTitle id="reset-modal-title">Spiel neustarten</ModalTitle>
             <ModalText id="reset-modal-description">
-              Are you sure you want to reset the game? This will clear all current 
-              game data and return to the setup screen. This action cannot be undone.
+              Bist du sicher, dass du das Spiel zurücksetzen möchtest? Dadurch werden alle aktuellen Spieldaten gelöscht und du wirst zum Einrichtungsbildschirm zurückgebracht. Diese Aktion kann nicht rückgängig gemacht werden.
             </ModalText>
             <ModalButtons>
               <ModalButton onClick={handleResetCancel}>
-                Cancel
+                Abbrechen
               </ModalButton>
               <ModalButton $variant="primary" onClick={handleResetConfirm}>
-                Reset Game
+                Spiel neustarten
               </ModalButton>
             </ModalButtons>
           </Modal>

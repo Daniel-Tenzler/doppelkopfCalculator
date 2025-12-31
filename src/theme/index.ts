@@ -88,7 +88,7 @@ export const lightTheme: ThemeDefinition = {
     accent: '#805AD5', // Purple
     success: '#38A169', // Green
     warning: '#D69E2E', // Yellow
-    error: '#FC8181', // Red
+    error: '#e05656ff', // Red
     
     // Game-specific colors
     winner: '#38A169', // Green for winners
@@ -137,7 +137,7 @@ export const darkTheme: ThemeDefinition = {
     accent: '#B794F4', // Lighter purple
     success: '#68D391', // Lighter green
     warning: '#F6E05E', // Brighter yellow
-    error: '#FC8181', // Same red as light theme
+    error: '#963d3dff', // Same red as light theme
     
     // Game-specific colors
     winner: '#68D391', // Lighter green for winners
