@@ -3,6 +3,7 @@ import type { Player, PlayerRoundResult } from '../../types';
 import {
   PlayerCellContainer,
   ScoreDisplay,
+  CumulativeScore,
   PlayerColorIndicator
 } from './PlayerCell.styles';
 
@@ -12,6 +13,7 @@ interface PlayerCellProps {
   isCurrentRound: boolean;
   roundWinners: string[]; // Array of player IDs who are winners
   onWinnerToggle: (playerId: string) => void;
+  cumulativeScore?: number; // Total score including this round (for past rounds)
 }
 
 
@@ -22,6 +24,7 @@ export const PlayerCell: React.FC<PlayerCellProps> = ({
   isCurrentRound,
   roundWinners,
   onWinnerToggle,
+  cumulativeScore,
 }) => {
   // For current rounds, check roundWinners array
   // For accepted rounds, check playerRoundResult.isWinner
@@ -91,6 +94,11 @@ export const PlayerCell: React.FC<PlayerCellProps> = ({
     >
       <ScoreDisplay $isWinner={isWinner}>
         {displayValue}
+        {cumulativeScore !== undefined && isWinner && (
+          <CumulativeScore>
+            ({cumulativeScore})
+          </CumulativeScore>
+        )}
       </ScoreDisplay>
       <PlayerColorIndicator $color={player.color} />
     </PlayerCellContainer>

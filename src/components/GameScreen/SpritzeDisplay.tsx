@@ -4,6 +4,7 @@ import {
   SpritzeDisplayContainer,
   SpritzeCount,
   SpritzeTypes,
+  SpritzePill,
   CarryOverIndicator
 } from './SpritzeDisplay.styles';
 
@@ -16,7 +17,7 @@ interface SpritzeDisplayProps {
 // Human-readable labels for spritze types
 const spritzeLabels: Record<SpritzeType, string> = {
   below_90: '< 90',
-  below_60: '< 60', 
+  below_60: '< 60',
   below_30: '< 30',
   schwarz: '0',
   against_queens: '♛',
@@ -65,25 +66,27 @@ export const SpritzeDisplay: React.FC<SpritzeDisplayProps> = ({
       <SpritzeCount>
         {totalSpritzes} {totalSpritzes === 1 ? 'Spritze' : 'Spritzes'}
       </SpritzeCount>
-      
+
       {mode === 'normal' && spritzeTypesList.length > 0 && (
         <SpritzeTypes>
-          {spritzeTypesList.map(type => spritzeLabels[type as SpritzeType]).join(' ')}
+          {spritzeTypesList.map(type => (
+            <SpritzePill key={type}>{spritzeLabels[type as SpritzeType]}</SpritzePill>
+          ))}
         </SpritzeTypes>
       )}
-      
+
       {mode === 'custom' && (spritzeState.customCount || 0) > 0 && (
         <SpritzeTypes>
-          Custom: {spritzeState.customCount || 0}
+          <SpritzePill>Custom: {spritzeState.customCount}</SpritzePill>
         </SpritzeTypes>
       )}
-      
+
       {(spritzeState.announcedBy?.length || 0) > 0 && (
         <SpritzeTypes>
-          A: {(spritzeState.announcedBy || []).length}
+          <SpritzePill>A: {(spritzeState.announcedBy || []).length}</SpritzePill>
         </SpritzeTypes>
       )}
-      
+
       {carryOverSpritzes.length > 0 && (
         <CarryOverIndicator>
           {(() => {

@@ -17,6 +17,7 @@ interface RoundRowProps {
   isCurrentRound: boolean;
   isPreviousRound: boolean;
   spritzeMode: 'normal' | 'custom';
+  cumulativeScores?: Map<string, number>; // Cumulative scores for each player at this round
   onWinnerToggle: (playerId: string) => void;
   onSpritzeChange: (spritzeState: SpritzeState) => void;
   onAccept: () => void;
@@ -30,6 +31,7 @@ export const RoundRow: React.FC<RoundRowProps> = ({
   isCurrentRound,
   isPreviousRound,
   spritzeMode,
+  cumulativeScores,
   onWinnerToggle,
   onSpritzeChange,
   onAccept,
@@ -52,6 +54,7 @@ export const RoundRow: React.FC<RoundRowProps> = ({
       {useMemo(() =>
         players.map(player => {
           const playerResult = round.playerResults.find(result => result.playerId === player.id);
+          const cumulativeScore = cumulativeScores?.get(player.id);
           return (
             <PlayerCell
               key={player.id}
@@ -60,9 +63,10 @@ export const RoundRow: React.FC<RoundRowProps> = ({
               isCurrentRound={isCurrentRound}
               roundWinners={round.winners}
               onWinnerToggle={onWinnerToggle}
+              cumulativeScore={cumulativeScore}
             />
           );
-        }), [players, round.playerResults, round.winners, isCurrentRound, onWinnerToggle]
+        }), [players, round.playerResults, round.winners, isCurrentRound, onWinnerToggle, cumulativeScores]
       )}
 
       {/* Spritze Display */}

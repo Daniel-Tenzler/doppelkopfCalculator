@@ -68,6 +68,37 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
     [rounds, currentRoundIndex]
   );
 
+  // Calculate cumulative scores for each player at each round
+  const cumulativeScoresByRound = useMemo(() => {
+    const scoresByRound = new Map<number, Map<string, number>>();
+    
+    // For each accepted round, calculate cumulative scores
+    rounds.forEach((round, roundIndex) => {
+      if (!round.isAccepted) return;
+      
+      const scoresAtThisRound = new Map<string, number>();
+      
+      players.forEach(player => {
+        // Sum up all points from rounds 0 to roundIndex (inclusive)
+        let cumulative = 0;
+        for (let i = 0; i <= roundIndex; i++) {
+          const r = rounds[i];
+          if (r.isAccepted) {
+            const playerResult = r.playerResults.find(pr => pr.playerId === player.id);
+            if (playerResult) {
+              cumulative += playerResult.pointsGained;
+            }
+          }
+        }
+        scoresAtThisRound.set(player.id, cumulative);
+      });
+      
+      scoresByRound.set(roundIndex, scoresAtThisRound);
+    });
+    
+    return scoresByRound;
+  }, [rounds, players]);
+
   // Memoized handler functions to prevent unnecessary re-renders
   const handleWinnerToggle = useCallback((roundIndex: number, playerId: string) => {
     // Validate inputs
@@ -138,6 +169,9 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
         return null;
       }
 
+      // Get cumulative scores for this round
+      const cumulativeScores = cumulativeScoresByRound.get(roundIndex);
+
       return (
         <RoundRow
           key={round.id}
@@ -147,6 +181,7 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
           isCurrentRound={status.isCurrentRound}
           isPreviousRound={status.isPreviousRound}
           spritzeMode={spritzeMode}
+          cumulativeScores={cumulativeScores}
           onWinnerToggle={(playerId: string) => handleWinnerToggle(roundIndex, playerId)}
           onSpritzeChange={(spritzeState: SpritzeState) => handleSpritzeChange(roundIndex, spritzeState)}
           onAccept={() => handleAcceptRound(roundIndex)}
@@ -154,7 +189,7 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
         />
       );
     }).filter(Boolean) // Filter out null components
-    , [rounds, roundStatuses, validPlayers, spritzeMode, handleWinnerToggle, handleSpritzeChange, handleAcceptRound, handleResetRound]
+    , [rounds, roundStatuses, validPlayers, spritzeMode, cumulativeScoresByRound, handleWinnerToggle, handleSpritzeChange, handleAcceptRound, handleResetRound]
   );
 
   // Comprehensive error handling with validation (after hooks)

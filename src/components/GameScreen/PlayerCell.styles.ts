@@ -44,6 +44,14 @@ export const ScoreDisplay = styled.span<{ $isWinner: boolean }>`
   color: ${({ $isWinner, theme }) => $isWinner ? theme.colors.winner : theme.colors.textSecondary};
 `;
 
+export const CumulativeScore = styled.span`
+  font-size: 18px;
+  display: block;
+  margin-top: 2px;
+  opacity: 0.8;
+  font-weight: 400;
+`;
+
 export const PlayerColorIndicator = styled.div<{ $color: string }>`
   position: absolute;
   top: 4px;

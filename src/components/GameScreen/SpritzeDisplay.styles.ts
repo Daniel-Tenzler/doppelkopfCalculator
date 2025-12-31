@@ -20,10 +20,21 @@ export const SpritzeCount = styled.div`
 `;
 
 export const SpritzeTypes = styled.div`
-  font-size: 13px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+`;
+
+export const SpritzePill = styled.span`
+  font-size: 12px;
   color: ${({ theme }) => theme.colors.textSecondary};
-  text-align: center;
-  line-height: 1.4;
+  background: ${({ theme }) => theme.colors.primary + '15'};
+  padding: 2px 8px;
+  border-radius: 10px;
+  white-space: nowrap;
+  font-weight: 500;
 `;
 
 export const CarryOverIndicator = styled.div`
@@ -31,4 +42,10 @@ export const CarryOverIndicator = styled.div`
   color: ${({ theme }) => theme.colors.carryOver};
   text-align: center;
   font-weight: 600;
+  background: ${({ theme }) => theme.colors.carryOver + '15'};
+  padding: 4px 10px;
+  border-radius: 12px;
+  display: inline-block;
+  align-self: center;
+  margin-top: 2px;
 `;
