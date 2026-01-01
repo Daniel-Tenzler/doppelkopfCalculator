@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { createPortal } from 'react-dom';
-import { PlayerBarChart } from './PlayerBarChart';
-import type { Player } from '../../types';
+import { PlayerBarChart } from '../PlayerBarChart/PlayerBarChart';
+import type { Player } from '../../../types';
 import {
   SidebarContainer,
   SidebarHeader,
@@ -30,11 +30,11 @@ interface PlayerSidebarProps {
   currentTheme: 'light' | 'dark';
 }
 
-export function PlayerSidebar({ 
-  players, 
-  onReset, 
-  onThemeToggle, 
-  currentTheme 
+export function PlayerSidebar({
+  players,
+  onReset,
+  onThemeToggle,
+  currentTheme
 }: PlayerSidebarProps) {
   const [showResetConfirm, setShowResetConfirm] = useState(false);
 
@@ -45,7 +45,7 @@ export function PlayerSidebar({
         setShowResetConfirm(false);
       }
     };
-    
+
     if (showResetConfirm) {
       document.addEventListener('keydown', handleEscape);
       return () => document.removeEventListener('keydown', handleEscape);
@@ -88,7 +88,7 @@ export function PlayerSidebar({
         <SidebarHeader>
           <SidebarTitle>Spieler</SidebarTitle>
         </SidebarHeader>
-        
+
         <PlayerList>
           {players.length === 0 ? (
             <EmptyState>
@@ -104,12 +104,12 @@ export function PlayerSidebar({
           <ResetButton onClick={handleResetClick}>
             Spiel neustarten
           </ResetButton>
-          
+
           <ThemeToggleContainer>
             <ThemeToggleLabel>
               {currentTheme === 'light' ? 'Hell' : 'Dunkel'} Modus
             </ThemeToggleLabel>
-            <ThemeToggle 
+            <ThemeToggle
               $isDark={currentTheme === 'dark'}
               onClick={onThemeToggle}
               aria-label={`Toggle theme. Currently ${currentTheme} mode`}
@@ -121,7 +121,7 @@ export function PlayerSidebar({
       </SidebarContainer>
 
       {showResetConfirm && createPortal(
-        <Overlay 
+        <Overlay
           $visible={showResetConfirm}
           role="dialog"
           aria-modal="true"

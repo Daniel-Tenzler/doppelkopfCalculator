@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { LAYOUT, COMPONENT_SIZES } from './constants';
+import { LAYOUT, COMPONENT_SIZES } from '../constants';
 
 export const SidebarContainer = styled.div`
   width: ${COMPONENT_SIZES.SIDEBAR_WIDTH};
@@ -130,7 +130,7 @@ export const ThemeToggle = styled.button<{ $isDark: boolean }>`
   position: relative;
   width: 56px;
   height: 32px;
-  background: ${({ $isDark, theme }) => 
+  background: ${({ $isDark, theme }) =>
     $isDark ? theme.colors.primary : theme.colors.border};
   border: none;
   border-radius: 16px;
@@ -197,11 +197,11 @@ export const ModalButtons = styled.div`
 
 export const ModalButton = styled.button<{ $variant?: 'primary' | 'secondary' }>`
   padding: 12px 24px;
-  border: 1px solid ${({ theme, $variant }) => 
+  border: 1px solid ${({ theme, $variant }) =>
     $variant === 'primary' ? theme.colors.error : theme.colors.border};
-  background: ${({ theme, $variant }) => 
+  background: ${({ theme, $variant }) =>
     $variant === 'primary' ? theme.colors.error : 'transparent'};
-  color: ${({ theme, $variant }) => 
+  color: ${({ theme, $variant }) =>
     $variant === 'primary' ? 'white' : theme.colors.text};
   border-radius: ${LAYOUT.BORDER_RADIUS};
   font-size: 15px;
@@ -209,17 +209,17 @@ export const ModalButton = styled.button<{ $variant?: 'primary' | 'secondary' }>
   cursor: pointer;
 
   &:hover {
-    ${({ theme, $variant }) => 
-      $variant === 'primary' 
-        ? `
+    ${({ theme, $variant }) =>
+    $variant === 'primary'
+      ? `
           background: ${theme.colors.error};
           opacity: 0.9;
         `
-        : `
+      : `
           background: ${theme.colors.borderLight};
           border-color: ${theme.colors.borderDark};
         `
-    }
+  }
   }
 
   &:focus {

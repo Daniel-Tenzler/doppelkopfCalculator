@@ -1,10 +1,10 @@
 import React, { useMemo } from 'react';
 
-import type { Round, Player, SpritzeState } from '../../types';
-import { RoundNumber } from './RoundNumber';
-import { PlayerCell } from './PlayerCell';
-import { SpritzeDisplay } from './SpritzeDisplay';
-import { SpritzeCheckboxes } from './SpritzeCheckboxes';
+import type { Round, Player, SpritzeState } from '../../../types';
+import { RoundNumber } from '../RoundNumber/RoundNumber';
+import { PlayerCell } from '../PlayerCell/PlayerCell';
+import { SpritzeDisplay } from '../SpritzeDisplay/SpritzeDisplay';
+import { SpritzeCheckboxes } from '../SpritzeCheckboxes/SpritzeCheckboxes';
 import {
   RoundRowContainer,
   CurrentRoundRow

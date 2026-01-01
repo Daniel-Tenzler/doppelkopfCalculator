@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COMPONENT_SIZES, LAYOUT } from './constants';
+import { COMPONENT_SIZES, LAYOUT } from '../constants';
 
 export const SpritzeCheckboxesContainer = styled.div`
   padding: 12px 16px;
@@ -49,7 +49,7 @@ interface SpritzeTypeCheckboxProps {
   $disabled: boolean;
 }
 
-export const SpritzeTypeCheckbox = styled.input.attrs({ type: 'checkbox' })<SpritzeTypeCheckboxProps>`
+export const SpritzeTypeCheckbox = styled.input.attrs({ type: 'checkbox' }) <SpritzeTypeCheckboxProps>`
   width: ${COMPONENT_SIZES.SMALL_CHECKBOX_SIZE};
   height: ${COMPONENT_SIZES.SMALL_CHECKBOX_SIZE};
   accent-color: ${({ theme }) => theme.colors.spritzeActive};

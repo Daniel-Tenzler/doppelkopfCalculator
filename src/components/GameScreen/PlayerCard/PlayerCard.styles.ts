@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { LAYOUT } from './constants';
+import { LAYOUT } from '../constants';
 
 export const PlayerCardContainer = styled.div`
   display: flex;

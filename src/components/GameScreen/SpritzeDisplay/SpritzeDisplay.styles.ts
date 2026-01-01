@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COMPONENT_SIZES, LAYOUT } from './constants';
+import { COMPONENT_SIZES, LAYOUT } from '../constants';
 
 export const SpritzeDisplayContainer = styled.div`
   padding: 12px 16px;

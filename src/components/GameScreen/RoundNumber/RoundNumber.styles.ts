@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COMPONENT_SIZES, Z_INDEX, LAYOUT } from './constants';
+import { COMPONENT_SIZES, Z_INDEX, LAYOUT } from '../constants';
 
 interface RoundNumberCellProps {
   $isCurrentRound: boolean;

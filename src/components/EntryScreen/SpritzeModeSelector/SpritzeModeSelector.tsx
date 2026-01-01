@@ -1,6 +1,6 @@
 import React from 'react';
-import type { SpritzeType } from '../../types';
-import { useThemeContext } from '../../context/ThemeContext';
+import type { SpritzeType } from '../../../types';
+import { useThemeContext } from '../../../context/ThemeContext';
 //import { validation } from '../../constants';
 //import { spritzeTypeLabels } from '../../constants';
 import {
@@ -48,7 +48,7 @@ export const SpritzeModeSelector: React.FC<SpritzeModeSelectorProps> = ({
   return (
     <Container>
       <Title>Spritzen Modus</Title>
-      
+
       <RadioGroup>
         <RadioLabel>
           <RadioInput
@@ -60,7 +60,7 @@ export const SpritzeModeSelector: React.FC<SpritzeModeSelectorProps> = ({
           />
           Normaler Modus - benutze vordefinierte Spritzen
         </RadioLabel>
-        
+
         <RadioLabel>
           <RadioInput
             type="radio"
@@ -89,7 +89,7 @@ export const SpritzeModeSelector: React.FC<SpritzeModeSelectorProps> = ({
           ))}
         </CheckboxGroup>
       )*/}
-      
+
 
       {/** currently broken. 
        mode === 'custom' && (

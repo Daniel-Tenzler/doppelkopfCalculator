@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo } from 'react';
-import { COMPONENT_SIZES } from './constants';
-import type { Round, Player, SpritzeState } from '../../types';
-import { RoundRow } from './RoundRow';
+import { COMPONENT_SIZES } from '../constants';
+import type { Round, Player, SpritzeState } from '../../../types';
+import { RoundRow } from '../RoundRow/RoundRow';
 import {
   ErrorState,
   TableContainer,
@@ -28,7 +28,7 @@ interface GameTableProps {
 // Validation functions
 const validateGameTableProps = (props: GameTableProps): boolean => {
   return !!(props &&
-    Array.isArray(props.rounds) && 
+    Array.isArray(props.rounds) &&
     Array.isArray(props.players) &&
     typeof props.currentRoundIndex === 'number' &&
     typeof props.onWinnerToggle === 'function' &&
@@ -55,11 +55,11 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
   } = props;
 
   // Memoize round status calculations to prevent unnecessary recalculations
-  const roundStatuses = useMemo(() => 
+  const roundStatuses = useMemo(() =>
     rounds.map((_, roundIndex) => {
       const isCurrentRound = roundIndex === currentRoundIndex;
       const isPreviousRound = roundIndex === currentRoundIndex - 1 && roundIndex >= 0;
-      
+
       return {
         isCurrentRound,
         isPreviousRound,
@@ -71,13 +71,13 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
   // Calculate cumulative scores for each player at each round
   const cumulativeScoresByRound = useMemo(() => {
     const scoresByRound = new Map<number, Map<string, number>>();
-    
+
     // For each accepted round, calculate cumulative scores
     rounds.forEach((round, roundIndex) => {
       if (!round.isAccepted) return;
-      
+
       const scoresAtThisRound = new Map<string, number>();
-      
+
       players.forEach(player => {
         // Sum up all points from rounds 0 to roundIndex (inclusive)
         let cumulative = 0;
@@ -92,10 +92,10 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
         }
         scoresAtThisRound.set(player.id, cumulative);
       });
-      
+
       scoresByRound.set(roundIndex, scoresAtThisRound);
     });
-    
+
     return scoresByRound;
   }, [rounds, players]);
 
@@ -106,7 +106,7 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
       console.error(`Invalid round index: ${roundIndex}`);
       return;
     }
-    
+
     const player = players.find(p => p.id === playerId);
     if (!player) {
       console.error(`Invalid player ID: ${playerId}`);
@@ -153,16 +153,16 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
   }, [rounds, onResetRound]);
 
   // Safe player mapping with error handling
-  const validPlayers = useMemo(() => 
+  const validPlayers = useMemo(() =>
     players.filter(validatePlayer),
     [players]
   );
 
   // Memoized round components to prevent unnecessary re-renders
-  const roundComponents = useMemo(() => 
+  const roundComponents = useMemo(() =>
     rounds.map((round, roundIndex) => {
       const status = roundStatuses[roundIndex];
-      
+
       // Validate round data
       if (!round || !round.id) {
         console.error(`Invalid round data at index ${roundIndex}:`, round);
@@ -212,7 +212,7 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
         <HeaderCell $width={COMPONENT_SIZES.ROUND_NUMBER_WIDTH}>
           #
         </HeaderCell>
-        
+
         {/* Player Headers */}
         {validPlayers.map(player => (
           <PlayerHeaderCell key={player.id}>
@@ -220,11 +220,11 @@ export const GameTable: React.FC<GameTableProps> = (props) => {
             <span>{player.name}</span>
           </PlayerHeaderCell>
         ))}
-        
+
         <HeaderCell $width={COMPONENT_SIZES.SPRITZE_DISPLAY_WIDTH} $start={true}>
           Spritzen
         </HeaderCell>
-        
+
         {/* Spritze Controls Header - only show in normal mode */}
         {spritzeMode === 'normal' && (
           <HeaderCell $width={COMPONENT_SIZES.SPRITZE_CONTROLS_WIDTH} $start={true}>

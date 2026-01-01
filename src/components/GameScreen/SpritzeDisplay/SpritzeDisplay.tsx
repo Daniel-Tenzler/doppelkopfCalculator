@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react';
-import type { SpritzeState, CarryOverSpritze, SpritzeType } from '../../types';
+import type { SpritzeState, CarryOverSpritze, SpritzeType } from '../../../types';
 import {
   SpritzeDisplayContainer,
   SpritzeCount,
@@ -42,7 +42,7 @@ export const SpritzeDisplay: React.FC<SpritzeDisplayProps> = ({
   const handleCustomCountChange = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setInputValue(value);
-    
+
     // Parse and update - allow any number including 0
     const numValue = parseInt(value, 10);
     if (!isNaN(numValue) && numValue >= 0 && onChange) {
@@ -73,8 +73,8 @@ export const SpritzeDisplay: React.FC<SpritzeDisplayProps> = ({
   }
 
   // In custom mode, don't add carry-overs to total
-  const totalSpritzes = mode === 'custom' 
-    ? activeSpritzes 
+  const totalSpritzes = mode === 'custom'
+    ? activeSpritzes
     : activeSpritzes + carryOverSpritzes.length;
 
   // Custom mode: show editable input

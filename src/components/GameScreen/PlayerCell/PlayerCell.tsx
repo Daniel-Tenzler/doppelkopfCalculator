@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react';
-import type { Player, PlayerRoundResult } from '../../types';
+import type { Player, PlayerRoundResult } from '../../../types';
 import {
   PlayerCellContainer,
   ScoreDisplay,

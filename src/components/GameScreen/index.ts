@@ -1,4 +1,4 @@
-export { PlayerCard } from './PlayerCard';
-export { PlayerSidebar } from './PlayerSidebar';
-export { GameTable } from './GameTable';
-export { GameScreen } from './GameScreen';
+export { PlayerCard } from './PlayerCard/PlayerCard';
+export { PlayerSidebar } from './PlayerSidebar/PlayerSidebar';
+export { GameTable } from './GameTable/GameTable';
+export { GameScreen } from './GameScreen/GameScreen';

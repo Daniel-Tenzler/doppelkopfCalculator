@@ -1,6 +1,6 @@
 import React, { useMemo } from 'react';
 
-import type { SpritzeState, SpritzeType, Player } from '../../types';
+import type { SpritzeState, SpritzeType, Player } from '../../../types';
 import {
   SpritzeCheckboxesContainer,
   CheckboxGroup,
@@ -95,7 +95,7 @@ export const SpritzeCheckboxes: React.FC<SpritzeCheckboxesProps> = ({
           </CheckboxLabel>
         ))}
       </CheckboxGroup>
-      
+
       {/* Player Announcement Checkboxes */}
       <AnnounceSection>
         <AnnounceGroup>

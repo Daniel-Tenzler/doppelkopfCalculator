@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { GRID_LAYOUT, LAYOUT } from './constants';
+import { GRID_LAYOUT, LAYOUT } from '../constants';
 
 export const RoundRowContainer = styled.div`
   display: grid;

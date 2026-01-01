@@ -1,8 +1,8 @@
 import React, { useCallback } from 'react';
-import type { GameState, SpritzeState } from '../../types';
-import { useThemeContext } from '../../context/ThemeContext';
-import { PlayerSidebar } from './PlayerSidebar';
-import { GameTable } from './GameTable';
+import type { GameState, SpritzeState } from '../../../types';
+import { useThemeContext } from '../../../context/ThemeContext';
+import { PlayerSidebar } from '../PlayerSidebar/PlayerSidebar';
+import { GameTable } from '../GameTable/GameTable';
 import {
   ErrorState,
   GameScreenContainer,
@@ -21,10 +21,10 @@ interface GameScreenProps {
 
 // Validation function for game state
 const validateGameState = (gameState: GameState | undefined): gameState is GameState => {
-  return !!(gameState && 
-    gameState.id && 
-    gameState.config && 
-    Array.isArray(gameState.players) && 
+  return !!(gameState &&
+    gameState.id &&
+    gameState.config &&
+    Array.isArray(gameState.players) &&
     Array.isArray(gameState.rounds) &&
     typeof gameState.currentRoundIndex === 'number'
   );

@@ -1,9 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import { PlayerInput } from './PlayerInput';
-import { SpritzeModeSelector } from './SpritzeModeSelector';
-import type { GameConfig, PlayerConfig, SpritzeType } from '../../types';
-import { useThemeContext } from '../../context/ThemeContext';
-import { defaultPlayerColors, defaultEnabledTypes, validation } from '../../constants';
+import { PlayerInput } from '../PlayerInput/PlayerInput';
+import { SpritzeModeSelector } from '../SpritzeModeSelector/SpritzeModeSelector';
+import type { GameConfig, PlayerConfig, SpritzeType } from '../../../types';
+import { useThemeContext } from '../../../context/ThemeContext';
+import { defaultPlayerColors, defaultEnabledTypes, validation } from '../../../constants';
 import {
   Container,
   Card,
@@ -23,14 +23,14 @@ interface EntryScreenProps {
 
 export const EntryScreen: React.FC<EntryScreenProps> = ({ onGameStart }) => {
   useThemeContext(); // Ensure theme context is available for styled components
-  
+
   const [players, setPlayers] = useState<PlayerConfig[]>([
     { name: '', color: defaultPlayerColors[0] },
     { name: '', color: defaultPlayerColors[1] },
     { name: '', color: defaultPlayerColors[2] },
     { name: '', color: defaultPlayerColors[3] }
   ]);
-  
+
   const [spritzeMode, setSpritzeMode] = useState<'normal' | 'custom'>('normal');
   const [enabledTypes, setEnabledTypes] = useState<SpritzeType[]>(defaultEnabledTypes);
   const [customSpritzeCount, setCustomSpritzeCount] = useState<number>(0);
@@ -42,7 +42,7 @@ export const EntryScreen: React.FC<EntryScreenProps> = ({ onGameStart }) => {
       newPlayers[index] = { ...newPlayers[index], name };
       return newPlayers;
     });
-    
+
     // Clear validation error when user starts typing
     if (name.trim()) {
       setValidationErrors(prev => {
@@ -86,7 +86,7 @@ export const EntryScreen: React.FC<EntryScreenProps> = ({ onGameStart }) => {
 
   const handleSubmit = useCallback((e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) {
       return;
     }

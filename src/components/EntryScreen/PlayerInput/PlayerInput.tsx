@@ -1,6 +1,6 @@
 import React from 'react';
-import { useThemeContext } from '../../context/ThemeContext';
-import { validation } from '../../constants';
+import { useThemeContext } from '../../../context/ThemeContext';
+import { validation } from '../../../constants';
 import {
   Container,
   InputGroup,
@@ -33,7 +33,7 @@ export const PlayerInput: React.FC<PlayerInputProps> = ({
 }) => {
   // Theme context is needed for styled components
   useThemeContext();
-  
+
   return (
     <Container>
       <InputGroup>

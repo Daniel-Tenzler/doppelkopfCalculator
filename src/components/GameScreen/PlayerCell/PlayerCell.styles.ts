@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { COMPONENT_SIZES, LAYOUT } from './constants';
+import { COMPONENT_SIZES, LAYOUT } from '../constants';
 
 interface PlayerCellPropsInternal {
   $isWinner: boolean;

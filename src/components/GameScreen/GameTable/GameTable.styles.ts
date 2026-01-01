@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { GRID_LAYOUT, COMPONENT_SIZES, LAYOUT } from './constants';
+import { GRID_LAYOUT, COMPONENT_SIZES, LAYOUT } from '../constants';
 
 export const ErrorState = styled.div`
   display: flex;

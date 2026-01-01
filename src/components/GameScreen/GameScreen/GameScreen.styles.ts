@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import { LAYOUT, COMPONENT_SIZES } from './constants';
+import { LAYOUT, COMPONENT_SIZES } from '../constants';
 
 export const ErrorState = styled.div`
   display: flex;

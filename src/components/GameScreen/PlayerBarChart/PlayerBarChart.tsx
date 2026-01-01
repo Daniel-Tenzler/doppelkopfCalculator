@@ -1,4 +1,4 @@
-import type { Player } from '../../types';
+import type { Player } from '../../../types';
 import {
   ChartContainer,
   ChartBar,
@@ -16,7 +16,7 @@ interface PlayerBarChartProps {
 export function PlayerBarChart({ players }: PlayerBarChartProps) {
   // Find max score for scaling
   const maxScore = Math.max(...players.map(p => Math.abs(p.totalScore)), 1);
-  
+
   // Sort players by position
   const sortedPlayers = [...players].sort((a, b) => a.position - b.position);
 
@@ -42,7 +42,7 @@ export function PlayerBarChart({ players }: PlayerBarChartProps) {
             </PositionBadge>
             <span>{player.name}</span>
           </BarLabel>
-          
+
           <BarWrapper>
             <BarFill
               $color={player.color}
