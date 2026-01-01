@@ -1,17 +1,17 @@
 import type { Round, CarryOverSpritze } from '../types';
 
 // Constants for carry-over management
-const CARRY_OVER_DURATION = 2; // 2 rounds as per requirements
+const CARRY_OVER_DURATION = 4; // 2 rounds as per requirements
 const MAX_CARRY_OVERS = 100; // Prevent DoS attacks and excessive accumulation
 
 export class SpritzeManagerError extends Error {
   name = 'SpritzeManagerError';
   context?: Record<string, unknown>;
-  
+
   constructor(message: string, context?: Record<string, unknown>) {
     super(message);
     // Sanitize context for production to avoid information disclosure
-    this.context = import.meta.env?.MODE === 'production' 
+    this.context = import.meta.env?.MODE === 'production'
       ? sanitizeErrorContext(context)
       : context;
   }
@@ -22,20 +22,20 @@ export class SpritzeManagerError extends Error {
  */
 function sanitizeErrorContext(context?: Record<string, unknown>): Record<string, unknown> | undefined {
   if (!context) return undefined;
-  
+
   // Only include safe, non-sensitive fields in production
   const sanitized: Record<string, unknown> = {};
   const allowedFields = [
     'playerCount', 'roundIndex', 'carryOverCount', 'invalidCarryOverIndex',
     'originRoundIndex', 'roundsRemaining', 'timestamp', 'functionName', 'maxLimit'
   ];
-  
+
   for (const field of allowedFields) {
     if (field in context) {
       sanitized[field] = context[field];
     }
   }
-  
+
   return sanitized;
 }
 
@@ -70,32 +70,32 @@ export function generateCarryOverSpritzes(
       createErrorContext('generateCarryOverSpritzes', { round })
     );
   }
-  
+
   if (!Array.isArray(allPlayerIds)) {
     throw new SpritzeManagerError(
       'allPlayerIds must be an array',
       createErrorContext('generateCarryOverSpritzes', { allPlayerIds })
     );
   }
-  
+
   if (allPlayerIds.length === 0) {
     throw new SpritzeManagerError(
       'allPlayerIds cannot be empty',
       createErrorContext('generateCarryOverSpritzes', { playerCount: 0 })
     );
   }
-  
+
   // DoS protection: prevent excessive player counts
   if (allPlayerIds.length > 50) { // Reasonable limit for card games
     throw new SpritzeManagerError(
       'allPlayerIds exceeds maximum allowed players',
-      createErrorContext('generateCarryOverSpritzes', { 
+      createErrorContext('generateCarryOverSpritzes', {
         playerCount: allPlayerIds.length,
         maxLimit: 50
       })
     );
   }
-  
+
   // Validate round structure
   if (!round.id || typeof round.id !== 'string') {
     throw new SpritzeManagerError(
@@ -103,41 +103,41 @@ export function generateCarryOverSpritzes(
       createErrorContext('generateCarryOverSpritzes', { roundId: round.id })
     );
   }
-  
+
   if (!Number.isInteger(round.roundNumber) || round.roundNumber < 1) {
     throw new SpritzeManagerError(
       'round must have a valid roundNumber (positive integer)',
-      createErrorContext('generateCarryOverSpritzes', { 
-        roundNumber: round.roundNumber 
+      createErrorContext('generateCarryOverSpritzes', {
+        roundNumber: round.roundNumber
       })
     );
   }
-  
+
   if (!Array.isArray(round.winners)) {
     throw new SpritzeManagerError(
       'round.winners must be an array',
-      createErrorContext('generateCarryOverSpritzes', { 
+      createErrorContext('generateCarryOverSpritzes', {
         roundId: round.id,
         winners: round.winners
       })
     );
   }
-  
+
   // Validate all winner IDs exist in allPlayerIds
   const invalidWinners = round.winners.filter(winnerId => !allPlayerIds.includes(winnerId));
   if (invalidWinners.length > 0) {
     throw new SpritzeManagerError(
       'round.winners contains invalid player IDs',
-      createErrorContext('generateCarryOverSpritzes', { 
+      createErrorContext('generateCarryOverSpritzes', {
         invalidWinners,
         validPlayerIds: allPlayerIds
       })
     );
   }
-  
+
   // Identify losers (players who are not winners)
   const losers = allPlayerIds.filter(playerId => !round.winners.includes(playerId));
-  
+
   // Generate carry-over Spritze for each loser
   const carryOvers: CarryOverSpritze[] = losers.map(loserId => ({
     playerId: loserId,
@@ -145,7 +145,7 @@ export function generateCarryOverSpritzes(
     originRoundIndex: round.roundNumber - 1, // 0-based index
     type: 'loss' as const
   }));
-  
+
   return carryOvers;
 }
 
@@ -165,18 +165,18 @@ export function processCarryOverSpritzes(carryOvers: CarryOverSpritze[]): CarryO
       createErrorContext('processCarryOverSpritzes', { carryOvers })
     );
   }
-  
+
   // DoS protection: prevent excessive carry-over arrays
   if (carryOvers.length > MAX_CARRY_OVERS) {
     throw new SpritzeManagerError(
       `carryOvers array exceeds maximum allowed size`,
-      createErrorContext('processCarryOverSpritzes', { 
+      createErrorContext('processCarryOverSpritzes', {
         carryOverCount: carryOvers.length,
         maxLimit: MAX_CARRY_OVERS
       })
     );
   }
-  
+
   // Validate each carry-over structure
   carryOvers.forEach((carryOver, index) => {
     if (!carryOver || typeof carryOver !== 'object') {
@@ -185,42 +185,42 @@ export function processCarryOverSpritzes(carryOvers: CarryOverSpritze[]): CarryO
         createErrorContext('processCarryOverSpritzes', { invalidCarryOverIndex: index })
       );
     }
-    
+
     if (!carryOver.playerId || typeof carryOver.playerId !== 'string') {
       throw new SpritzeManagerError(
         `Invalid playerId in carry-over at index ${index}: must be a non-empty string`,
         createErrorContext('processCarryOverSpritzes', { invalidCarryOverIndex: index })
       );
     }
-    
+
     if (!Number.isInteger(carryOver.roundsRemaining) || carryOver.roundsRemaining < 0) {
       throw new SpritzeManagerError(
         `Invalid roundsRemaining in carry-over at index ${index}: must be a non-negative integer`,
-        createErrorContext('processCarryOverSpritzes', { 
+        createErrorContext('processCarryOverSpritzes', {
           invalidCarryOverIndex: index,
           roundsRemaining: carryOver.roundsRemaining
         })
       );
     }
-    
+
     if (!Number.isInteger(carryOver.originRoundIndex) || carryOver.originRoundIndex < 0) {
       throw new SpritzeManagerError(
         `Invalid originRoundIndex in carry-over at index ${index}: must be a non-negative integer`,
-        createErrorContext('processCarryOverSpritzes', { 
+        createErrorContext('processCarryOverSpritzes', {
           invalidCarryOverIndex: index,
           originRoundIndex: carryOver.originRoundIndex
         })
       );
     }
   });
-  
+
   // Optimized processing: single-pass algorithm with minimal object creation
   const processedCarryOvers: CarryOverSpritze[] = [];
-  
+
   for (let i = 0; i < carryOvers.length; i++) {
     const carryOver = carryOvers[i];
     const newRoundsRemaining = carryOver.roundsRemaining - 1;
-    
+
     if (newRoundsRemaining > 0) {
       processedCarryOvers.push({
         playerId: carryOver.playerId,
@@ -230,7 +230,7 @@ export function processCarryOverSpritzes(carryOvers: CarryOverSpritze[]): CarryO
       });
     }
   }
-  
+
   return processedCarryOvers;
 }
 
@@ -254,25 +254,25 @@ export function removeCarryOversFromRound(
       createErrorContext('removeCarryOversFromRound', { carryOvers })
     );
   }
-  
+
   // DoS protection: prevent excessive carry-over arrays
   if (carryOvers.length > MAX_CARRY_OVERS) {
     throw new SpritzeManagerError(
       `carryOvers array exceeds maximum allowed size`,
-      createErrorContext('removeCarryOversFromRound', { 
+      createErrorContext('removeCarryOversFromRound', {
         carryOverCount: carryOvers.length,
         maxLimit: MAX_CARRY_OVERS
       })
     );
   }
-  
+
   if (!Number.isInteger(originRoundIndex) || originRoundIndex < 0) {
     throw new SpritzeManagerError(
       'originRoundIndex must be a non-negative integer',
       createErrorContext('removeCarryOversFromRound', { originRoundIndex })
     );
   }
-  
+
   // Validate each carry-over structure (same validation as in processCarryOverSpritzes)
   carryOvers.forEach((carryOver, index) => {
     if (!carryOver || typeof carryOver !== 'object') {
@@ -281,7 +281,7 @@ export function removeCarryOversFromRound(
         createErrorContext('removeCarryOversFromRound', { invalidCarryOverIndex: index })
       );
     }
-    
+
     if (!carryOver.playerId || typeof carryOver.playerId !== 'string') {
       throw new SpritzeManagerError(
         `Invalid playerId in carry-over at index ${index}: must be a non-empty string`,
@@ -289,12 +289,12 @@ export function removeCarryOversFromRound(
       );
     }
   });
-  
+
   // Remove carry-overs from specified round
   const filteredCarryOvers = carryOvers.filter(
     carryOver => carryOver.originRoundIndex !== originRoundIndex
   );
-  
+
   return filteredCarryOvers;
 }
 
@@ -307,7 +307,7 @@ export function removeCarryOversFromRound(
  * @returns Array of carry-overs for the specified player
  */
 export function getPlayerCarryOvers(
-  carryOvers: CarryOverSpritze[], 
+  carryOvers: CarryOverSpritze[],
   playerId: string
 ): CarryOverSpritze[] {
   if (!Array.isArray(carryOvers)) {
@@ -316,25 +316,25 @@ export function getPlayerCarryOvers(
       createErrorContext('getPlayerCarryOvers', { carryOvers })
     );
   }
-  
+
   // DoS protection: prevent excessive carry-over arrays
   if (carryOvers.length > MAX_CARRY_OVERS) {
     throw new SpritzeManagerError(
       `carryOvers array exceeds maximum allowed size`,
-      createErrorContext('getPlayerCarryOvers', { 
+      createErrorContext('getPlayerCarryOvers', {
         carryOverCount: carryOvers.length,
         maxLimit: MAX_CARRY_OVERS
       })
     );
   }
-  
+
   if (!playerId || typeof playerId !== 'string') {
     throw new SpritzeManagerError(
       'playerId must be a non-empty string',
       createErrorContext('getPlayerCarryOvers', { playerId })
     );
   }
-  
+
   return carryOvers.filter(carryOver => carryOver.playerId === playerId);
 }
 
@@ -346,7 +346,7 @@ export function getPlayerCarryOvers(
  * @returns True if player has active carry-overs
  */
 export function playerHasCarryOvers(
-  carryOvers: CarryOverSpritze[], 
+  carryOvers: CarryOverSpritze[],
   playerId: string
 ): boolean {
   return getPlayerCarryOvers(carryOvers, playerId).length > 0;
@@ -366,18 +366,18 @@ export function getTotalCarryOverCount(carryOvers: CarryOverSpritze[]): number {
       createErrorContext('getTotalCarryOverCount', { carryOvers })
     );
   }
-  
+
   // DoS protection: prevent excessive carry-over arrays
   if (carryOvers.length > MAX_CARRY_OVERS) {
     throw new SpritzeManagerError(
       `carryOvers array exceeds maximum allowed size`,
-      createErrorContext('getTotalCarryOverCount', { 
+      createErrorContext('getTotalCarryOverCount', {
         carryOverCount: carryOvers.length,
         maxLimit: MAX_CARRY_OVERS
       })
     );
   }
-  
+
   return carryOvers.length;
 }
 
@@ -401,21 +401,21 @@ export function generateAnnouncementCarryOvers(
       createErrorContext('generateAnnouncementCarryOvers', { round })
     );
   }
-  
+
   if (!Array.isArray(allPlayerIds)) {
     throw new SpritzeManagerError(
       'allPlayerIds must be an array',
       createErrorContext('generateAnnouncementCarryOvers', { allPlayerIds })
     );
   }
-  
+
   if (allPlayerIds.length === 0) {
     throw new SpritzeManagerError(
       'allPlayerIds cannot be empty',
       createErrorContext('generateAnnouncementCarryOvers', { playerCount: 0 })
     );
   }
-  
+
   // Validate round structure
   if (!round.id || typeof round.id !== 'string') {
     throw new SpritzeManagerError(
@@ -423,55 +423,55 @@ export function generateAnnouncementCarryOvers(
       createErrorContext('generateAnnouncementCarryOvers', { roundId: round.id })
     );
   }
-  
+
   if (!Number.isInteger(round.roundNumber) || round.roundNumber < 1) {
     throw new SpritzeManagerError(
       'round must have a valid roundNumber (positive integer)',
-      createErrorContext('generateAnnouncementCarryOvers', { 
-        roundNumber: round.roundNumber 
+      createErrorContext('generateAnnouncementCarryOvers', {
+        roundNumber: round.roundNumber
       })
     );
   }
-  
+
   if (!Array.isArray(round.winners)) {
     throw new SpritzeManagerError(
       'round.winners must be an array',
-      createErrorContext('generateAnnouncementCarryOvers', { 
+      createErrorContext('generateAnnouncementCarryOvers', {
         roundId: round.id,
         winners: round.winners
       })
     );
   }
-  
+
   // Validate all winner IDs exist in allPlayerIds
   const invalidWinners = round.winners.filter(winnerId => !allPlayerIds.includes(winnerId));
   if (invalidWinners.length > 0) {
     throw new SpritzeManagerError(
       'round.winners contains invalid player IDs',
-      createErrorContext('generateAnnouncementCarryOvers', { 
+      createErrorContext('generateAnnouncementCarryOvers', {
         invalidWinners,
         validPlayerIds: allPlayerIds
       })
     );
   }
-  
+
   const announcedBy = round.spritzeState.announcedBy || [];
   const winners = round.winners || [];
-  
-  
-  
+
+
+
   // Validate announcedBy contains only valid player IDs
   const invalidAnnouncers = announcedBy.filter(announcerId => !allPlayerIds.includes(announcerId));
   if (invalidAnnouncers.length > 0) {
     throw new SpritzeManagerError(
       'announcedBy contains invalid player IDs',
-      createErrorContext('generateAnnouncementCarryOvers', { 
+      createErrorContext('generateAnnouncementCarryOvers', {
         invalidAnnouncers,
-        validPlayerIds: allPlayerIds 
+        validPlayerIds: allPlayerIds
       })
     );
   }
-  
+
   // Validate announcedBy is an array of strings
   if (!Array.isArray(announcedBy)) {
     throw new SpritzeManagerError(
@@ -479,18 +479,18 @@ export function generateAnnouncementCarryOvers(
       createErrorContext('generateAnnouncementCarryOvers', { announcedBy })
     );
   }
-  
-  
-  
+
+
+
   // Optimize with Sets for O(1) lookups
   const playerIdSet = new Set(allPlayerIds);
   const winnerSet = new Set(winners);
-  
+
   // Find players who announced but didn't win
-  const failedAnnouncers = announcedBy.filter(announcerId => 
+  const failedAnnouncers = announcedBy.filter(announcerId =>
     playerIdSet.has(announcerId) && !winnerSet.has(announcerId)
   );
-  
+
   // Generate carry-over Spritze for each failed announcer
   const announcementCarryOvers: CarryOverSpritze[] = failedAnnouncers.map(playerId => ({
     playerId,
@@ -498,7 +498,7 @@ export function generateAnnouncementCarryOvers(
     originRoundIndex: round.roundNumber - 1, // 0-based index
     type: 'announcement' as const
   }));
-  
+
   return announcementCarryOvers;
 }
 
@@ -534,7 +534,7 @@ export function deduplicateCarryOvers(
   if (lossCarryOvers.length > MAX_CARRY_OVERS) {
     throw new SpritzeManagerError(
       `lossCarryOvers array exceeds maximum allowed size`,
-      createErrorContext('deduplicateCarryOvers', { 
+      createErrorContext('deduplicateCarryOvers', {
         carryOverCount: lossCarryOvers.length,
         maxLimit: MAX_CARRY_OVERS
       })
@@ -544,7 +544,7 @@ export function deduplicateCarryOvers(
   if (announcementCarryOvers.length > MAX_CARRY_OVERS) {
     throw new SpritzeManagerError(
       `announcementCarryOvers array exceeds maximum allowed size`,
-      createErrorContext('deduplicateCarryOvers', { 
+      createErrorContext('deduplicateCarryOvers', {
         carryOverCount: announcementCarryOvers.length,
         maxLimit: MAX_CARRY_OVERS
       })
@@ -569,7 +569,7 @@ export function deduplicateCarryOvers(
 
   // Only add announcement carry-overs for players not in loss map
   const uniqueCarryOvers: CarryOverSpritze[] = [...lossMap.values()];
-  
+
   announcementCarryOvers.forEach(co => {
     // Validate each carry-over
     if (!co.playerId || typeof co.playerId !== 'string') {

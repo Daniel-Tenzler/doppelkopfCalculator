@@ -172,7 +172,7 @@ This plan implements a React-based scoring companion for Doppelkopf card games. 
     - Ensure carry-over removal and score recalculation
     - _Requirements: 3.5, 3.6, 3.7, 3.8_
 
-- [ ] 17. Final checkpoint
+- [x] 17. Final checkpoint
   - Review implementation of all components.
 
 ## Notes

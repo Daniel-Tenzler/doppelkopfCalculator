@@ -13,6 +13,13 @@ A web application for tracking scores during Doppelkopf card game sessions. Buil
 - Game state persists in local storage
 - Light and dark theme toggle with persistent preferences
 
+## Open TODOs
+
+- Implement adjusted scoring for Solos - currently treats solos as regular Spritzes
+- Add support for saving & loading multiple game sessions
+- Add internationalization support (currently mixed English/German)
+- Consider service worker implementation for offline support
+
 ## Getting Started
 
 ### Prerequisites
