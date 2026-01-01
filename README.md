@@ -16,7 +16,6 @@ A web application for tracking scores during Doppelkopf card game sessions. Buil
 ## Open TODOs
 
 - Implement adjusted scoring for Solos - currently treats solos as regular Spritzes
-- Add mobile responsive design
 - Add support for saving & loading multiple game sessions
 - Add internationalization support (currently mixed English/German)
 - Consider service worker implementation for offline support

@@ -13,6 +13,12 @@ export const SpritzeDisplayContainer = styled.div`
   height: fit-content;
   align-self: center;
   gap: 6px;
+  
+  @media (max-width: 450px) {
+    padding: 16px;
+    width: -webkit-fill-available;
+    min-height: 44px;
+  }
 `;
 
 export const SpritzeCount = styled.div`

@@ -169,6 +169,11 @@ export const PlayersGrid = styled.div`
     grid-template-columns: 1fr;
     gap: 14px;
   }
+  
+  @media (max-width: 450px) {
+    grid-template-columns: 1fr;
+    gap: clamp(10px, 2vw, 12px);
+  }
 `;
 
 export const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
@@ -242,6 +247,13 @@ export const Button = styled.button<{ $variant?: 'primary' | 'secondary' }>`
     min-height: 40px;
     border-radius: 6px;
   }
+  
+  @media (max-width: 450px) {
+    font-size: 16px; /* Prevent iOS zoom */
+    min-height: 48px; /* Touch target minimum */
+    min-width: auto; /* Allow full width on mobile */
+    width: 100%;
+  }
 `;
 
 export const ButtonGroup = styled.div`
@@ -261,5 +273,12 @@ export const ButtonGroup = styled.div`
     align-items: stretch;
     gap: clamp(8px, 1.2vw, 12px);
     margin-top: clamp(24px, 3.5vw, 32px);
+  }
+  
+  @media (max-width: 450px) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: clamp(10px, 2vw, 12px);
+    margin-top: clamp(20px, 4vw, 28px);
   }
 `;

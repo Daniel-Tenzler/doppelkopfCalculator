@@ -11,6 +11,19 @@ export const RoundRowContainer = styled.div`
   &:last-child {
     border-bottom: none;
   }
+  
+  @media (max-width: 450px) {
+    /* Card-based layout for mobile */
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px;
+    background: ${({ theme }) => theme.colors.surface};
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: 8px;
+    margin-bottom: 12px;
+    border-bottom: none; /* Remove the default border-bottom */
+  }
 `;
 
 export const CurrentRoundRow = styled(RoundRowContainer)`
@@ -21,4 +34,11 @@ export const CurrentRoundRow = styled(RoundRowContainer)`
   border: none;
   margin-top: 18px;
   background: ${({ theme }) => theme.colors.primary + '10'};
+  
+  @media (max-width: 450px) {
+    margin: 0 0 16px 0;
+    padding: 16px;
+    background: ${({ theme }) => theme.colors.primary + '15'};
+    border: 2px solid ${({ theme }) => theme.colors.primary + '40'};
+  }
 `;

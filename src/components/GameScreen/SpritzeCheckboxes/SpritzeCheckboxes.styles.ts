@@ -10,12 +10,23 @@ export const SpritzeCheckboxesContainer = styled.div`
   display: flex;
   flex-direction: column;
   gap: 8px;
+  
+  @media (max-width: 450px) {
+    padding: 16px;
+    min-height: 44px;
+  }
 `;
 
 export const CheckboxGroup = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
+  
+  @media (max-width: 450px) {
+    padding: 0px;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 4px;
+  }
 `;
 
 interface CheckboxLabelProps {
@@ -42,6 +53,19 @@ export const CheckboxLabel = styled.label<CheckboxLabelProps>`
     outline: 2px solid ${({ theme }) => theme.colors.primary};
     outline-offset: 2px;
     border-radius: ${LAYOUT.BORDER_RADIUS};
+  }
+  
+  @media (max-width: 450px) {
+    padding: 0;
+    font-size: 14px;
+    gap: 4px;
+    
+    input[type="checkbox"] {
+      width: 20px;
+      height: 20px;
+      min-width: 20px;
+      min-height: 20px;
+    }
   }
 `;
 
@@ -79,4 +103,9 @@ export const AnnounceGroup = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 8px;
+  
+  @media (max-width: 450px) {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 12px;
+  }
 `;

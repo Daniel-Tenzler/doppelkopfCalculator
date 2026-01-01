@@ -39,6 +39,10 @@ export const TableHeader = styled.div`
   color: ${({ theme }) => theme.colors.textSecondary};
   text-transform: uppercase;
   letter-spacing: 0.6px;
+
+  @media (max-width: 450px) {
+    display: none;
+  }
 `;
 
 export const HeaderCell = styled.div<{ $width?: string, $start?: boolean }>`

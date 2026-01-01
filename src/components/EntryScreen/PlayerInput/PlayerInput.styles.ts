@@ -136,6 +136,12 @@ export const TextInput = styled.input<{ $hasError?: boolean }>`
     font-size: clamp(12px, 1.6vw, 14px);
     min-height: 36px;
   }
+  
+  @media (max-width: 450px) {
+    font-size: 16px; /* Prevent iOS zoom */
+    min-height: 48px; /* Touch target minimum */
+    padding: 12px clamp(12px, 2vw, 16px);
+  }
 `;
 
 export const ColorPicker = styled.input`
@@ -193,6 +199,13 @@ export const ColorPicker = styled.input`
     height: clamp(32px, 4.5vw, 36px);
     min-width: clamp(32px, 4.5vw, 36px);
     min-height: clamp(32px, 4.5vw, 36px);
+  }
+  
+  @media (max-width: 450px) {
+    width: 44px;
+    height: 44px;
+    min-width: 44px;
+    min-height: 44px; /* Touch target minimum */
   }
 `;
 

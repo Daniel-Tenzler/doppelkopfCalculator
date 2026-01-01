@@ -38,12 +38,25 @@ export const PlayerCellContainer = styled.div<PlayerCellPropsInternal>`
       background: ${$isWinner ? theme.colors.winner + '60' : theme.colors.primary + '10'};
     }
   `}
+  
+  @media (max-width: 450px) {
+    min-height: 48px; /* Touch target minimum */
+    padding: 8px;
+    height: auto;
+    width: 100%;
+    border-radius: 6px;
+    margin-bottom: 4px;
+  }
 `;
 
 export const ScoreDisplay = styled.span<{ $isWinner: boolean }>`
   font-weight: 600;
   font-size: 16px;
   color: ${({ $isWinner, theme }) => $isWinner ? theme.colors.winner : theme.colors.textSecondary};
+  
+  @media (max-width: 450px) {
+    font-size: 14px;
+  }
 `;
 
 export const CumulativeScore = styled.span`
@@ -72,4 +85,9 @@ export const PlayerName = styled.span`
   text-align: center;
   word-break: break-word;
   padding: 0;
+  
+  @media (max-width: 450px) {
+    font-size: 14px;
+    line-height: 1.2;
+  }
 `;

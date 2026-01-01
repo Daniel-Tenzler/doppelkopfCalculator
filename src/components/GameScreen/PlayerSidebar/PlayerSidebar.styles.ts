@@ -36,6 +36,13 @@ export const SidebarContainer = styled.div`
   /* Firefox scrollbar */
   scrollbar-width: thin;
   scrollbar-color: ${({ theme }) => theme.colors.borderDark} ${({ theme }) => theme.colors.borderLight};
+  
+  @media (max-width: 450px) {
+    width: 100%;
+    max-height: none; /* Remove max-height on mobile */
+    padding: 16px;
+    border-radius: 12px;
+  }
 `;
 
 export const SidebarHeader = styled.div`
@@ -107,6 +114,13 @@ export const ResetButton = styled.button`
     background: ${({ theme }) => theme.colors.border};
     cursor: not-allowed;
     opacity: 0.5;
+  }
+  
+  @media (max-width: 450px) {
+    font-size: 16px; /* Prevent iOS zoom */
+    min-height: 48px; /* Touch target minimum */
+    padding: 12px 20px;
+    margin-bottom: 16px;
   }
 `;
 

@@ -44,6 +44,12 @@ export const GameScreenContainer = styled.div`
     padding: 20px 16px;
     gap: 20px;
   }
+  
+  @media (max-width: 450px) {
+    flex-direction: column;
+    gap: 16px;
+    padding: 16px 12px;
+  }
 `;
 
 export const SidebarContainer = styled.div`
@@ -67,6 +73,11 @@ export const SidebarContainer = styled.div`
     position: static;
     height: auto;
   }
+  
+  @media (max-width: 450px) {
+    order: 2; /* Move sidebar below table on mobile */
+    width: 100%;
+  }
 `;
 
 export const TableContainer = styled.div`
@@ -77,6 +88,11 @@ export const TableContainer = styled.div`
   min-height: ${COMPONENT_SIZES.TABLE_MIN_HEIGHT};
   
   @media (max-width: 1024px) {
+    width: 100%;
+  }
+  
+  @media (max-width: 450px) {
+    order: 1; /* Keep table first on mobile */
     width: 100%;
   }
 `;

@@ -103,6 +103,12 @@ export const RadioLabel = styled.label`
     padding: clamp(6px, 1.2vw, 10px);
     min-height: clamp(40px, 5.5vw, 44px);
   }
+  
+  @media (max-width: 450px) {
+    font-size: 16px; /* Prevent iOS zoom */
+    min-height: 48px; /* Touch target minimum */
+    padding: 10px 12px;
+  }
 `;
 
 export const RadioInput = styled.input`
@@ -242,6 +248,12 @@ export const NumberInput = styled.input`
     padding: clamp(6px, 1vw, 10px) clamp(10px, 1.5vw, 14px);
     font-size: clamp(12px, 1.6vw, 14px);
     min-height: clamp(36px, 5vw, 40px);
+  }
+  
+  @media (max-width: 450px) {
+    font-size: 16px; /* Prevent iOS zoom */
+    min-height: 48px; /* Touch target minimum */
+    width: 100px;
   }
 `;
 

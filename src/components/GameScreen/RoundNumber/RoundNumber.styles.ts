@@ -34,6 +34,12 @@ export const RoundNumberCell = styled.div<RoundNumberCellProps>`
     outline: 2px solid ${({ theme }) => theme.colors.primary};
     outline-offset: 2px;
   }
+
+  @media (max-width: 450px) {
+    padding: 16px;
+    width: -webkit-fill-available;
+    height: 30px;
+  }
 `;
 
 export const ActionButton = styled.button`
