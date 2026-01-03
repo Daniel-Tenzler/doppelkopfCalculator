@@ -1,0 +1,30 @@
+[package]
+name = "doppelkopf-scorer"
+version = "0.1.0"
+description = "A professional Doppelkopf scoring application"
+authors = ["Doppelkopf Scorer Team"]
+license = "MIT"
+repository = ""
+edition = "2021"
+rust-version = "1.77.2"
+
+# See more keys and their definitions at https://doc.rust.lang.org/cargo/reference/manifest.html
+
+[lib]
+name = "doppelkopf_scorer_lib"
+crate-type = ["staticlib", "cdylib", "rlib"]
+
+[build-dependencies]
+tauri-build = { version = "2.5.3", features = [] }
+
+[dependencies]
+tauri = { version = "2.9.5", features = [] }
+tauri-plugin-shell = "2"
+tauri-plugin-fs = "2"
+tauri-plugin-dialog = "2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+log = "0.4"
+tauri-plugin-log = { version = "2", features = ["colored"] }
+tokio = { version = "1", features = ["full"] }
+muda = "0.17"

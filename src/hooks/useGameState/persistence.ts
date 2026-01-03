@@ -10,9 +10,9 @@ import { getErrorMessage } from './utils';
  */
 export function useDebouncedSave(setError: SetError) {
   return useMemo(
-    () => debounce((state: GameState) => {
+    () => debounce(async (state: GameState) => {
       try {
-        saveGameState(state);
+        await saveGameState(state);
       } catch (err) {
         const message = getErrorMessage(err);
         setError(message);
@@ -34,23 +34,27 @@ export function usePersistedStateLoader(
   useEffect(() => {
     let isMounted = true;
     
-    try {
-      const persistedState = loadGameState();
-      if (isMounted) {
-        setGameState(persistedState);
-        setError(null);
+    const loadState = async () => {
+      try {
+        const persistedState = await loadGameState();
+        if (isMounted) {
+          setGameState(persistedState);
+          setError(null);
+        }
+      } catch (err) {
+        const message = getErrorMessage(err);
+        if (isMounted) {
+          setError(message);
+        }
+        console.error('Failed to load game state:', err);
+      } finally {
+        if (isMounted) {
+          setIsLoading(false);
+        }
       }
-    } catch (err) {
-      const message = getErrorMessage(err);
-      if (isMounted) {
-        setError(message);
-      }
-      console.error('Failed to load game state:', err);
-    } finally {
-      if (isMounted) {
-        setIsLoading(false);
-      }
-    }
+    };
+
+    loadState();
 
     return () => {
       isMounted = false;

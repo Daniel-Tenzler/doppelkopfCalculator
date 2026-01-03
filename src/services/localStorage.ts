@@ -1,4 +1,5 @@
 import type { GameState, PersistedState } from '../types';
+import { isTauriApp, saveGameState as saveGameStateCrossPlatform, loadGameState as loadGameStateCrossPlatform, saveTheme as saveThemeCrossPlatform, loadTheme as loadThemeCrossPlatform, clearGameState as clearGameStateCrossPlatform } from './crossPlatformStorage';
 
 // Storage keys
 const STORAGE_KEYS = {
@@ -120,13 +121,24 @@ function safeParse<T>(json: string): T {
  * @param state - Game state to persist
  * @throws {LocalStorageError} When storage is unavailable or serialization fails
  */
-export function saveGameState(state: GameState): void {
+export async function saveGameState(state: GameState): Promise<void> {
   // Input validation
   if (!state || typeof state !== 'object') {
     throw new LocalStorageError(
       'gameState must be a valid object',
       createErrorContext('saveGameState', { state })
     );
+  }
+
+  // Use cross-platform storage in Tauri environment
+  if (isTauriApp()) {
+    try {
+      await saveGameStateCrossPlatform(state);
+      return;
+    } catch (error) {
+      console.warn('Cross-platform storage failed, falling back to localStorage:', error);
+      // Continue with localStorage fallback
+    }
   }
 
   if (!isLocalStorageAvailable()) {
@@ -158,7 +170,18 @@ export function saveGameState(state: GameState): void {
  * @returns Game state if available, null otherwise
  * @throws {LocalStorageError} When JSON parsing fails
  */
-export function loadGameState(): GameState | null {
+export async function loadGameState(): Promise<GameState | null> {
+  // Use cross-platform storage in Tauri environment
+  if (isTauriApp()) {
+    try {
+      const state = await loadGameStateCrossPlatform();
+      return state as GameState | null;
+    } catch (error) {
+      console.warn('Cross-platform storage failed, falling back to localStorage:', error);
+      // Continue with localStorage fallback
+    }
+  }
+
   if (!isLocalStorageAvailable()) {
     console.warn('localStorage is not available, returning null game state');
     return null;
@@ -173,7 +196,7 @@ export function loadGameState(): GameState | null {
 
     if (serializedState === '') {
       console.warn('Empty game state found in localStorage, clearing it');
-      clearGameState();
+      await clearGameState();
       return null;
     }
 
@@ -182,7 +205,7 @@ export function loadGameState(): GameState | null {
     // Basic validation of loaded state
     if (!state || typeof state !== 'object') {
       console.warn('Invalid game state found in localStorage, clearing it');
-      clearGameState();
+      await clearGameState();
       return null;
     }
 
@@ -210,7 +233,18 @@ export function loadGameState(): GameState | null {
  * 
  * @throws {LocalStorageError} When storage is unavailable
  */
-export function clearGameState(): void {
+export async function clearGameState(): Promise<void> {
+  // Use cross-platform storage in Tauri environment
+  if (isTauriApp()) {
+    try {
+      await clearGameStateCrossPlatform();
+      return;
+    } catch (error) {
+      console.warn('Cross-platform storage failed, falling back to localStorage:', error);
+      // Continue with localStorage fallback
+    }
+  }
+
   if (!isLocalStorageAvailable()) {
     throw new LocalStorageError(
       'localStorage is not available',
@@ -237,13 +271,24 @@ export function clearGameState(): void {
  * @param theme - Theme preference ('light' or 'dark')
  * @throws {LocalStorageError} When storage is unavailable or theme is invalid
  */
-export function saveTheme(theme: 'light' | 'dark'): void {
+export async function saveTheme(theme: 'light' | 'dark'): Promise<void> {
   // Input validation
   if (theme !== 'light' && theme !== 'dark') {
     throw new LocalStorageError(
       `Invalid theme: ${theme}. Must be 'light' or 'dark'`,
       createErrorContext('saveTheme', { theme })
     );
+  }
+
+  // Use cross-platform storage in Tauri environment
+  if (isTauriApp()) {
+    try {
+      await saveThemeCrossPlatform(theme);
+      return;
+    } catch (error) {
+      console.warn('Cross-platform storage failed, falling back to localStorage:', error);
+      // Continue with localStorage fallback
+    }
   }
 
   if (!isLocalStorageAvailable()) {
@@ -271,7 +316,18 @@ export function saveTheme(theme: 'light' | 'dark'): void {
  * @returns Theme preference ('light' or 'dark'), defaults to 'light' if not found
  * @throws {LocalStorageError} When storage operations fail critically
  */
-export function loadTheme(): 'light' | 'dark' {
+export async function loadTheme(): Promise<'light' | 'dark'> {
+  // Use cross-platform storage in Tauri environment
+  if (isTauriApp()) {
+    try {
+      const theme = await loadThemeCrossPlatform();
+      return theme;
+    } catch (error) {
+      console.warn('Cross-platform storage failed, falling back to localStorage:', error);
+      // Continue with localStorage fallback
+    }
+  }
+
   if (!isLocalStorageAvailable()) {
     console.warn('localStorage is not available, using default theme');
     return DEFAULT_THEME;
@@ -313,10 +369,10 @@ export function loadTheme(): 'light' | 'dark' {
  * 
  * @returns Complete persisted state with defaults for missing data
  */
-export function loadPersistedState(): PersistedState {
+export async function loadPersistedState(): Promise<PersistedState> {
   try {
-    const gameState = loadGameState();
-    const theme = loadTheme();
+    const gameState = await loadGameState();
+    const theme = await loadTheme();
     
     return {
       gameState,
@@ -337,7 +393,7 @@ export function loadPersistedState(): PersistedState {
  * 
  * @throws {LocalStorageError} When storage is unavailable
  */
-export function clearAllData(): void {
+export async function clearAllData(): Promise<void> {
   if (!isLocalStorageAvailable()) {
     throw new LocalStorageError(
       'localStorage is not available',
@@ -364,7 +420,7 @@ export function clearAllData(): void {
  * 
  * @returns True if game state exists in localStorage
  */
-export function hasPersistedGame(): boolean {
+export async function hasPersistedGame(): Promise<boolean> {
   if (!isLocalStorageAvailable()) {
     return false;
   }

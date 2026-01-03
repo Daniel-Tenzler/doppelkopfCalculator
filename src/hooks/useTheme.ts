@@ -45,27 +45,55 @@ function createErrorContext(functionName: string, data: Record<string, unknown>)
  */
 export function useTheme(): UseThemeReturn {
   const [theme, setThemeState] = useState<Theme>(() => {
-    // Initialize theme from localStorage or system preference
-    try {
-      const savedTheme = loadTheme();
-      if (savedTheme) {
-        return savedTheme;
-      }
-    } catch (err) {
-      console.error('Failed to load saved theme:', err);
-    }
-
-    // Fallback to system preference
+    // Initialize from system preference first
     return getSystemThemePreference();
   });
 
+  // Load theme from storage asynchronously and update state
+  useEffect(() => {
+    let isMounted = true;
+    
+    const loadSavedTheme = async () => {
+      try {
+        const savedTheme = await loadTheme();
+        if (savedTheme && isMounted) {
+          setThemeState(savedTheme);
+        }
+      } catch (err) {
+        console.error('Failed to load saved theme:', err);
+      }
+    };
+    
+    loadSavedTheme();
+    
+    // Cleanup function to prevent state updates on unmounted component
+    return () => {
+      isMounted = false;
+    };
+  }, []); // Empty dependency array - this runs only once on mount
+
   // Save theme to localStorage whenever it changes
   useEffect(() => {
-    try {
-      saveTheme(theme);
-    } catch (err) {
-      console.error('Failed to save theme:', err);
-    }
+    let isMounted = true;
+    
+    const saveThemeAsync = async () => {
+      try {
+        if (isMounted) {
+          await saveTheme(theme);
+        }
+      } catch (err) {
+        if (isMounted) {
+          console.error('Failed to save theme:', err);
+        }
+      }
+    };
+    
+    saveThemeAsync();
+    
+    // Cleanup function
+    return () => {
+      isMounted = false;
+    };
   }, [theme]);
 
   /**
